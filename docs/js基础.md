@@ -4,13 +4,13 @@ typora-root-url: ..
 
 # this的指向问题
 
-<img src="../source/images/js%E5%9F%BA%E7%A1%80/image-20210718220900834.png" alt="image-20210718220900834" style="zoom: 67%;" />
+<img src="/../source/images/js%E5%9F%BA%E7%A1%80/image-20210718220900834-1627543491304.png" alt="image-20210718220900834" style="zoom:67%;" />
 
-<img src="../source/images/js%E5%9F%BA%E7%A1%80/image-20210718221929275.png" alt="image-20210718221929275" style="zoom:67%;" />
+<img src="/../source/images/js%E5%9F%BA%E7%A1%80/image-20210718221929275-1627543536364.png" alt="image-20210718221929275" style="zoom:67%;" />
 
 **箭头函数**中本身没有this，导致它会从上一级代码块中寻找this，继承自父执行上下文中的this。
 
-<img src="../source/images/js%E5%9F%BA%E7%A1%80/image-20210718224348911.png" alt="image-20210718224348911" style="zoom:67%;" />
+<img src="/../source/images/js%E5%9F%BA%E7%A1%80/image-20210718224348911-1627543585573.png" alt="image-20210718224348911" style="zoom:80%;" />
 
 # 深拷贝浅拷贝
 
@@ -28,11 +28,11 @@ typora-root-url: ..
 
 **深拷贝：**从堆内存中开辟一个新的区域存放对象，对对象中的子对象进行递归拷贝，拷贝前后的两个对象互不影响。
 
-<img src="../source/images/js%E5%9F%BA%E7%A1%80/image-20210719152003990.png" alt="image-20210719152003990" style="zoom:67%;" />
+![image-20210719152003990](/../source/images/js%E5%9F%BA%E7%A1%80/image-20210719152003990-1627543622884.png)
 
 深、浅拷贝实现方式：
 
-  <img src="../source/images/js%E5%9F%BA%E7%A1%80/image-20210719152921774.png" alt="image-20210719152921774" style="zoom:67%;" />
+<img src="/../source/images/js%E5%9F%BA%E7%A1%80/image-20210719152921774-1627543655877.png" alt="image-20210719152921774" style="zoom:80%;" />
 
 **注意：**函数、日期、正则格式的数据用JSON.parse(JSON.stringify())方式进行深拷贝，会变成空对象，会把undefined去掉。（用此方法进行深拷贝的弊端）
 
@@ -83,7 +83,7 @@ typora-root-url: ..
 2. 找变量声明  将变量名作为GO对象的属性名    值是undefined
 3. 找函数声明  值赋予函改体
 
-<img src="../source/images/js%E5%9F%BA%E7%A1%80/image-20210718214140121.png" alt="image-20210718214140121" style="zoom:67%;" />
+<img src="/../source/images/js%E5%9F%BA%E7%A1%80/image-20210718214140121-1627543695175.png" alt="image-20210718214140121" style="zoom:80%;" />
 
 预编译完进行解释执行操作。
 
@@ -103,7 +103,7 @@ typora-root-url: ..
 
 **防抖实际应用**如下：
 
-<img src="../source/images/js%E5%9F%BA%E7%A1%80/image-20210719202645876.png" alt="image-20210719202645876" style="zoom:80%;" />
+![image-20210719202645876](/../source/images/js%E5%9F%BA%E7%A1%80/image-20210719202645876-1627543729107.png)
 
 **节流：**当持续触发事件的时候，保证一定时间内，只调用一次事件处理函数，一段时间内只做一件事情（每隔一段时间执行一次）。
 
@@ -113,11 +113,9 @@ typora-root-url: ..
 
 防抖代码：（输入框一秒内不管输入多少数据，都是一秒后才打印出来）
 
-<img src="../source/images/js%E5%9F%BA%E7%A1%80/image-20210721164939054.png" alt="image-20210721164939054" style="zoom: 67%;" />
+<img src="/../source/images/js%E5%9F%BA%E7%A1%80/image-20210721164939054-1627543749278.png" alt="image-20210721164939054" style="zoom:80%;" />
 
-
-
-<img src="../source/images/js%E5%9F%BA%E7%A1%80/image-20210721164749030.png" alt="image-20210721164749030" style="zoom:67%;" />
+<img src="/../source/images/js%E5%9F%BA%E7%A1%80/image-20210721164939054-1627543765053.png" alt="image-20210721164939054" style="zoom:80%;" />
 
 
 
@@ -137,17 +135,17 @@ call、apply、bind都是改变this指向的方法。（call和apply非常相似
 
   一个叫喵喵的猫喜欢吃鱼，一个叫汪汪的小狗喜欢啃骨头，有一天，小狗汪汪和喵喵共进午餐的时候，汪汪说自己想尝尝小鱼干的味道，但是因为有刺，喵喵就想了个办法，说自己先吃，完了喂给汪汪。
 
-<img src="../source/images/js%E5%9F%BA%E7%A1%80/20180517112432197" alt="img" style="zoom:80%;" />
+<img src="/../source/images/js%E5%9F%BA%E7%A1%80/image-20210729153544797.png" alt="image-20210729153544797" style="zoom:80%;" />
 
 这样，汪汪就吃到了美味的鱼干。可是汪汪每吨都想来点小鱼干，喵喵还要工作去捉老鼠，所以它们又想了一个办法，喵喵把吃鱼的方法教给汪汪。这样，每次汪汪就可以自己吃小鱼干了。
 
-<img src="../source/images/js%E5%9F%BA%E7%A1%80/20180517112744838" alt="https://img-blog.csdn.net/20180517112744838?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTAxNzYwOTc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" style="zoom: 80%;" />
+<img src="/../source/images/js%E5%9F%BA%E7%A1%80/image-20210729153459128.png" alt="image-20210729153459128" style="zoom:80%;" />
 
 bind()方法注意：bind的时候传的参数会预先传给返回的方法，调用方法时就不用再传参数了。
 
 如果call()和apply()的第一个参数是null或者undefined，那么this的指向就是全局变量，在浏览器里就是window对象。
 
-<img src="../source/images/js%E5%9F%BA%E7%A1%80/2018051715053339" alt="https://img-blog.csdn.net/2018051715053339?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTAxNzYwOTc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" style="zoom:80%;" />
+<img src="/../source/images/js%E5%9F%BA%E7%A1%80/image-20210729153402094.png" alt="image-20210729153402094" style="zoom:80%;" />
 
 **apply与call在使用方式上的区别**还使得apply有些特殊的用法。比如：如何使用push方法，**不用循环完成两个数组的合并**。
 
@@ -214,11 +212,13 @@ let arr = Array.prototype.slice.call(伪数组)//可以将伪数组转化为z真
 
 使用场景： 1.全局的缓存 2.弹窗
 
-单例模式在创建弹框的应用（es5实现）：<img src="../source/images/js%E5%9F%BA%E7%A1%80/image-20210723160348796.png" alt="image-20210723160348796" style="zoom: 80%;" />
+单例模式在创建弹框的应用（es5实现）：
+
+<img src="/../source/images/js%E5%9F%BA%E7%A1%80/image-20210723160348796-1627543864886.png" alt="image-20210723160348796" style="zoom:67%;" />
 
 (es6实现)
 
-<img src="../source/images/js%E5%9F%BA%E7%A1%80/image-20210723163810624.png" alt="image-20210723163810624" style="zoom:80%;" />
+<img src="/../source/images/js%E5%9F%BA%E7%A1%80/image-20210723163810624-1627543889173.png" alt="image-20210723163810624" style="zoom:67%;" />
 
 **2.策略模式**
 
