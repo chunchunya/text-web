@@ -1,16 +1,12 @@
----
-typora-root-url: ..
----
-
 # this的指向问题
 
-<img src="/source/images/js%E5%9F%BA%E7%A1%80/image-20210729162811689.png" alt="image-20210729162811689" style="zoom:67%;" />
+<img src="../source/images/js%E5%9F%BA%E7%A1%80/image-20210729162811689.png" alt="image-20210729162811689" style="zoom:67%;" />
 
-<img src="/source/images/js%E5%9F%BA%E7%A1%80/image-20210729162932108.png" alt="image-20210729162932108" style="zoom:80%;" />
+<img src="../source/images/js%E5%9F%BA%E7%A1%80/image-20210729162932108.png" alt="image-20210729162932108" style="zoom:80%;" />
 
 **箭头函数**中本身没有this，导致它会从上一级代码块中寻找this，继承自父执行上下文中的this。
 
-<img src="/source/images/js%E5%9F%BA%E7%A1%80/image-20210729162955029.png" alt="image-20210729162955029" style="zoom:80%;" />
+<img src="../source/images/js%E5%9F%BA%E7%A1%80/image-20210729162955029.png" alt="image-20210729162955029" style="zoom:80%;" />
 
 # 深拷贝浅拷贝
 
@@ -28,11 +24,11 @@ typora-root-url: ..
 
 **深拷贝：**从堆内存中开辟一个新的区域存放对象，对对象中的子对象进行递归拷贝，拷贝前后的两个对象互不影响。
 
-![image-20210719152003990](/../../source/images/js%2525E5%25259F%2525BA%2525E7%2525A1%252580/image-20210719152003990-1627543622884.png)
+<img src="../source/images/js%E5%9F%BA%E7%A1%80/image-20210719152003990-1627543622884.png" alt="image-20210719152003990-1627543622884" style="zoom:67%;" />
 
 深、浅拷贝实现方式：
 
-![image-20210729163021639](/source/images/js%E5%9F%BA%E7%A1%80/image-20210729163021639.png)
+![image-20210729163021639](../source/images/js%E5%9F%BA%E7%A1%80/image-20210729163021639.png)
 
 **注意：**函数、日期、正则格式的数据用JSON.parse(JSON.stringify())方式进行深拷贝，会变成空对象，会把undefined去掉。（用此方法进行深拷贝的弊端）
 
@@ -83,7 +79,7 @@ typora-root-url: ..
 2. 找变量声明  将变量名作为GO对象的属性名    值是undefined
 3. 找函数声明  值赋予函改体
 
-![image-20210729163057109](/source/images/js%E5%9F%BA%E7%A1%80/image-20210729163057109.png)
+![image-20210729163057109](../source/images/js%E5%9F%BA%E7%A1%80/image-20210729163057109.png)
 
 预编译完进行解释执行操作。
 
@@ -103,7 +99,7 @@ typora-root-url: ..
 
 **防抖实际应用**如下：
 
-<img src="/source/images/js%E5%9F%BA%E7%A1%80/image-20210729163337213.png" alt="image-20210729163337213" style="zoom:80%;" />
+<img src="../source/images/js%E5%9F%BA%E7%A1%80/image-20210729163337213.png" alt="image-20210729163337213" style="zoom:80%;" />
 
 **节流：**当持续触发事件的时候，保证一定时间内，只调用一次事件处理函数，一段时间内只做一件事情（每隔一段时间执行一次）。
 
@@ -113,9 +109,9 @@ typora-root-url: ..
 
 防抖代码：（输入框一秒内不管输入多少数据，都是一秒后才打印出来）
 
-<img src="/source/images/js%E5%9F%BA%E7%A1%80/image-20210729163355629.png" alt="image-20210729163355629" style="zoom:80%;" />
+<img src="../source/images/js%E5%9F%BA%E7%A1%80/image-20210729163355629.png" alt="image-20210729163355629" style="zoom:80%;" />
 
-![image-20210729163424460](/source/images/js%E5%9F%BA%E7%A1%80/image-20210729163424460.png)
+![image-20210729163424460](../source/images/js%E5%9F%BA%E7%A1%80/image-20210729163424460.png)
 
 
 
@@ -135,17 +131,17 @@ call、apply、bind都是改变this指向的方法。（call和apply非常相似
 
   一个叫喵喵的猫喜欢吃鱼，一个叫汪汪的小狗喜欢啃骨头，有一天，小狗汪汪和喵喵共进午餐的时候，汪汪说自己想尝尝小鱼干的味道，但是因为有刺，喵喵就想了个办法，说自己先吃，完了喂给汪汪。
 
-<img src="/source/images/js%E5%9F%BA%E7%A1%80/image-20210729164053716.png" alt="image-20210729164053716" style="zoom:80%;" />
+<img src="../source/images/js%E5%9F%BA%E7%A1%80/image-20210729164053716.png" alt="image-20210729164053716" style="zoom:80%;" />
 
 这样，汪汪就吃到了美味的鱼干。可是汪汪每顿都想来点小鱼干，喵喵还要工作去捉老鼠，所以它们又想了一个办法，喵喵把吃鱼的方法教给汪汪。这样，每次汪汪就可以自己吃小鱼干了。
 
-<img src="/source/images/js%E5%9F%BA%E7%A1%80/image-20210729164213610.png" alt="image-20210729164213610" style="zoom:80%;" />
+<img src="../source/images/js%E5%9F%BA%E7%A1%80/image-20210729164213610.png" alt="image-20210729164213610" style="zoom:80%;" />
 
 bind()方法注意：bind的时候传的参数会预先传给返回的方法，调用方法时就不用再传参数了。
 
 如果call()和apply()的第一个参数是null或者undefined，那么this的指向就是全局变量，在浏览器里就是window对象。
 
-<img src="/source/images/js%E5%9F%BA%E7%A1%80/image-20210729163507255.png" alt="image-20210729163507255" style="zoom:80%;" />
+<img src="../source/images/js%E5%9F%BA%E7%A1%80/image-20210729163507255.png" alt="image-20210729163507255" style="zoom:80%;" />
 
 **apply与call在使用方式上的区别**还使得apply有些特殊的用法。比如：如何使用push方法，**不用循环完成两个数组的合并**。
 
@@ -214,11 +210,11 @@ let arr = Array.prototype.slice.call(伪数组)//可以将伪数组转化为z真
 
 单例模式在创建弹框的应用（es5实现）：
 
-<img src="/source/images/js%E5%9F%BA%E7%A1%80/image-20210729164258556.png" alt="image-20210729164258556" style="zoom:80%;" />
+<img src="../source/images/js%E5%9F%BA%E7%A1%80/image-20210729164258556.png" alt="image-20210729164258556" style="zoom:80%;" />
 
 (es6实现)
 
-<img src="/source/images/js%E5%9F%BA%E7%A1%80/image-20210729164312820.png" alt="image-20210729164312820" style="zoom:80%;" />
+<img src="../source/images/js%E5%9F%BA%E7%A1%80/image-20210729164312820.png" alt="image-20210729164312820" style="zoom:80%;" />
 
 **2.策略模式**
 
@@ -352,3 +348,4 @@ let newArr = (arr)=>{
 console.log(newArr(arr1));
 ```
 
+![img](../source/images/js%E5%9F%BA%E7%A1%80/me11.jpg)
