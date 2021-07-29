@@ -184,6 +184,14 @@ cat.sayHi.bind(mouse, 10, "cheese")()  // hi，I am Jerry,10 years old,I like ch
 
 区别在最后一行 cat.sayHi.bind(mouse, 10, "cheese")()  。可以看到与apply和call相比，在bind()方法后还有个(),这正说明了bind方法返回的是一个函数，并不执行，需要手动去调用才会执行。其返回结果与前两者相同。
 
+注：
+
+```javascript
+let arr = Array.prototype.slice.call(伪数组)//可以将伪数组转化为z真正的数组
+```
+
+
+
 # js 的事件循环机制
 
 # 设计模式
@@ -210,11 +218,7 @@ cat.sayHi.bind(mouse, 10, "cheese")()  // hi，I am Jerry,10 years old,I like ch
 
 **2.策略模式**
 
-
-
 **3.发布订阅模式**
-
-
 
 # 立即执行函数
 
