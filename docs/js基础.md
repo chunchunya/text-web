@@ -1,3 +1,7 @@
+---
+typora-root-url: ..
+---
+
 # this的指向问题
 
 <img src="../source/images/js%E5%9F%BA%E7%A1%80/image-20210729162811689.png" alt="image-20210729162811689" style="zoom:67%;" />
@@ -349,3 +353,5 @@ console.log(newArr(arr1));
 ```
 
 ![img](../source/images/js%E5%9F%BA%E7%A1%80/me11.jpg)
+
+![image-20210729170322722](/source/images/js%E5%9F%BA%E7%A1%80/image-20210729170322722.png)
