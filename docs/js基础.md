@@ -1,10 +1,6 @@
----
-typora-root-url: ..
----
-
 # this的指向问题
 
-<img src="/../source/images/js%E5%9F%BA%E7%A1%80/image-20210718220900834-1627543491304.png" alt="image-20210718220900834" style="zoom:67%;" />
+<img src="/../source/images/js%E5%9F%BA%E7%A1%80/image-20210718220900834-1627544581880.png" alt="image-20210718220900834" style="zoom: 67%;" />
 
 <img src="/../source/images/js%E5%9F%BA%E7%A1%80/image-20210718221929275-1627543536364.png" alt="image-20210718221929275" style="zoom:67%;" />
 
@@ -135,7 +131,7 @@ call、apply、bind都是改变this指向的方法。（call和apply非常相似
 
   一个叫喵喵的猫喜欢吃鱼，一个叫汪汪的小狗喜欢啃骨头，有一天，小狗汪汪和喵喵共进午餐的时候，汪汪说自己想尝尝小鱼干的味道，但是因为有刺，喵喵就想了个办法，说自己先吃，完了喂给汪汪。
 
-<img src="/../source/images/js%E5%9F%BA%E7%A1%80/image-20210729153544797.png" alt="image-20210729153544797" style="zoom:80%;" />
+![image-20210729153544797](/../source/images/js%E5%9F%BA%E7%A1%80/image-20210729153544797.png)
 
 这样，汪汪就吃到了美味的鱼干。可是汪汪每吨都想来点小鱼干，喵喵还要工作去捉老鼠，所以它们又想了一个办法，喵喵把吃鱼的方法教给汪汪。这样，每次汪汪就可以自己吃小鱼干了。
 
