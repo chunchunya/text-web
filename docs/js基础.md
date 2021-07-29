@@ -1,14 +1,12 @@
-
-
 # this的指向问题
 
-![image-20210729171324685](../source/images/js%E5%9F%BA%E7%A1%80/image-20210729171324685.png)
+![image-20210729183609970](../source/images/js%E5%9F%BA%E7%A1%80/image-20210729183609970.png)
 
-![image-20210729171337539](../source/images/js%E5%9F%BA%E7%A1%80/image-20210729171337539.png)
+![image-20210729183621894](../source/images/js%E5%9F%BA%E7%A1%80/image-20210729183621894.png)
 
 **箭头函数**中本身没有this，导致它会从上一级代码块中寻找this，继承自父执行上下文中的this。
 
-![image-20210729171353730](../source/images/js%E5%9F%BA%E7%A1%80/image-20210729171353730.png)
+![image-20210729183633968](../source/images/js%E5%9F%BA%E7%A1%80/image-20210729183633968.png)
 
 # 深拷贝浅拷贝
 
@@ -26,11 +24,11 @@
 
 **深拷贝：**从堆内存中开辟一个新的区域存放对象，对对象中的子对象进行递归拷贝，拷贝前后的两个对象互不影响。
 
-![image-20210729171414833](../source/images/js%E5%9F%BA%E7%A1%80/image-20210729171414833.png)
+![image-20210729183645687](../source/images/js%E5%9F%BA%E7%A1%80/image-20210729183645687.png)
 
 深、浅拷贝实现方式：
 
-![image-20210729163021639](../source/images/js%E5%9F%BA%E7%A1%80/image-20210729163021639.png)
+![image-20210729183716328](../source/images/js%E5%9F%BA%E7%A1%80/image-20210729183716328.png)
 
 **注意：**函数、日期、正则格式的数据用JSON.parse(JSON.stringify())方式进行深拷贝，会变成空对象，会把undefined去掉。（用此方法进行深拷贝的弊端）
 
@@ -81,7 +79,7 @@
 2. 找变量声明  将变量名作为GO对象的属性名    值是undefined
 3. 找函数声明  值赋予函改体
 
-![image-20210729163057109](../source/images/js%E5%9F%BA%E7%A1%80/image-20210729163057109.png)
+![image-20210729183843515](../source/images/js%E5%9F%BA%E7%A1%80/image-20210729183843515.png)
 
 预编译完进行解释执行操作。
 
@@ -101,7 +99,7 @@
 
 **防抖实际应用**如下：
 
-![image-20210729171457368](../source/images/js%E5%9F%BA%E7%A1%80/image-20210729171457368.png)
+![image-20210729183932989](../source/images/js%E5%9F%BA%E7%A1%80/image-20210729183932989.png)
 
 **节流：**当持续触发事件的时候，保证一定时间内，只调用一次事件处理函数，一段时间内只做一件事情（每隔一段时间执行一次）。
 
@@ -111,9 +109,9 @@
 
 防抖代码：（输入框一秒内不管输入多少数据，都是一秒后才打印出来）
 
-![image-20210729171521119](../source/images/js%E5%9F%BA%E7%A1%80/image-20210729171521119.png)
+![image-20210729183943221](../source/images/js%E5%9F%BA%E7%A1%80/image-20210729183943221.png)
 
-![image-20210729163424460](../source/images/js%E5%9F%BA%E7%A1%80/image-20210729163424460.png)
+![image-20210729183954587](../source/images/js%E5%9F%BA%E7%A1%80/image-20210729183954587.png)
 
 
 
@@ -133,17 +131,17 @@ call、apply、bind都是改变this指向的方法。（call和apply非常相似
 
   一个叫喵喵的猫喜欢吃鱼，一个叫汪汪的小狗喜欢啃骨头，有一天，小狗汪汪和喵喵共进午餐的时候，汪汪说自己想尝尝小鱼干的味道，但是因为有刺，喵喵就想了个办法，说自己先吃，完了喂给汪汪。
 
-![image-20210729171545775](/source/images/js%E5%9F%BA%E7%A1%80/image-20210729171545775.png)
+![image-20210729184055102](../source/images/js%E5%9F%BA%E7%A1%80/image-20210729184055102.png)
 
 这样，汪汪就吃到了美味的鱼干。可是汪汪每顿都想来点小鱼干，喵喵还要工作去捉老鼠，所以它们又想了一个办法，喵喵把吃鱼的方法教给汪汪。这样，每次汪汪就可以自己吃小鱼干了。
 
-![image-20210729171647312](/source/images/js%E5%9F%BA%E7%A1%80/image-20210729171647312.png)
+![image-20210729184120361](../source/images/js%E5%9F%BA%E7%A1%80/image-20210729184120361.png)
 
 bind()方法注意：bind的时候传的参数会预先传给返回的方法，调用方法时就不用再传参数了。
 
 如果call()和apply()的第一个参数是null或者undefined，那么this的指向就是全局变量，在浏览器里就是window对象。
 
-![image-20210729171707043](../source/images/js%E5%9F%BA%E7%A1%80/image-20210729171707043.png)
+![image-20210729184045201](../source/images/js%E5%9F%BA%E7%A1%80/image-20210729184045201.png)
 
 **apply与call在使用方式上的区别**还使得apply有些特殊的用法。比如：如何使用push方法，**不用循环完成两个数组的合并**。
 
@@ -212,11 +210,11 @@ let arr = Array.prototype.slice.call(伪数组)//可以将伪数组转化为z真
 
 单例模式在创建弹框的应用（es5实现）：
 
-![image-20210729171744011](../source/images/js%E5%9F%BA%E7%A1%80/image-20210729171744011.png)
+![image-20210729184015162](../source/images/js%E5%9F%BA%E7%A1%80/image-20210729184015162.png)
 
 (es6实现)
 
-![image-20210729171753153](../source/images/js%E5%9F%BA%E7%A1%80/image-20210729171753153.png)
+![image-20210729184023689](../source/images/js%E5%9F%BA%E7%A1%80/image-20210729184023689.png)
 
 **2.策略模式**
 
