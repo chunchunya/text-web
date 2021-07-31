@@ -1,8 +1,38 @@
 # this的指向问题
 
+直接使用函数，this指向全局。对象调用函数，this指向对象。
+
 ![image-20210729183609970](../source/images/js%E5%9F%BA%E7%A1%80/image-20210729183609970.png)
 
-![image-20210729183621894](../source/images/js%E5%9F%BA%E7%A1%80/image-20210729183621894.png)
+**阿里的一道笔试题**
+
+```javascript
+var name =222;
+var a = {
+    name: 111,
+    say: function(){
+        console.log(this.name)
+    }
+}
+var fun = a.say;
+fun();   //fun.call(window)  === 222
+a.say();  //a.say.call(a)   === 111
+
+
+var b = {
+    name: 123,
+    say: function(fun){
+        fun();
+    }
+}
+b.say(a.say);    //  等同于fun = a.say; fun()   fun.call(window)   ===222
+b.say = a.say;
+b.say();         // b.say.call(b) === 123
+```
+
+　this永远指向的是最后调用它的对象，也就是看它执行的时候是谁调用的，上式中虽然函数say是被对象a所引用，但是在将say赋值给变量fun的时候并没有执行,所以最终指向的是window，这和下一行是不一样的，a.say()是直接执行了say函数。
+
+
 
 **箭头函数**中本身没有this，导致它会从上一级代码块中寻找this，继承自父执行上下文中的this。
 
@@ -348,3 +378,22 @@ let newArr = (arr)=>{
 console.log(newArr(arr1));
 ```
 
+# 原型链的继承
+
+```javascript
+function Person() {
+
+}
+var person = new Person();
+console.log(person.__proto__ == Person.prototype) // true
+console.log(Person.prototype.constructor == Person) // true
+
+// 顺便学习一个ES5的方法,可以获得对象的原型
+console.log(Object.getPrototypeOf(person) === Person.prototype) // true
+```
+
+**原型链的弊端**是：
+
+1.当两个实例对象指向同一个原型的时候，改变其中一个实例对象中的属性，另一个实例对象也会跟着改变。
+
+2.并没有实现super功能（对父类传参）。
