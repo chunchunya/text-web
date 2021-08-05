@@ -30,7 +30,7 @@ b.say = a.say;
 b.say();         // b.say.call(b) === 123
 ```
 
-　this永远指向的是最后调用它的对象，也就是看它执行的时候是谁调用的，上式中虽然函数say是被对象a所引用，但是在将say赋值给变量fun的时候并没有执行,所以最终指向的是window，这和下一行是不一样的，a.say()是直接执行了say函数。
+　this永远指向的是最后调用它的对象，也就是看它**执行**的时候是谁调用的，上式中虽然函数say是被对象a所引用，但是在将say赋值给变量fun的时候并没有执行,所以最终指向的是window，这和下一行是不一样的，a.say()是直接执行了say函数。
 
 
 
@@ -61,6 +61,86 @@ b.say();         // b.say.call(b) === 123
 ![image-20210729183716328](../source/images/js%E5%9F%BA%E7%A1%80/image-20210729183716328.png)
 
 **注意：**函数、日期、正则格式的数据用JSON.parse(JSON.stringify())方式进行深拷贝，会变成空对象，会把undefined去掉。（用此方法进行深拷贝的弊端）
+
+```javascript
+//深拷贝1
+let deepCopy = (newObj,oldObj)=>{
+    for(let key in oldObj){
+        let item= oldObj[key];
+        if(item instanceof Array){
+            newObj[key] = [];
+            deepCopy(newObj[key],item);
+
+        }else if(item instanceof Object){
+            newObj[key] = {};
+            deepCopy(newObj[key],item);
+        }else{
+            newObj[key] = item;
+        }
+    }
+    return newObj;
+}
+
+//深拷贝2的写法
+let deepCopy2 = (obj)=>{
+    let copyObj = {};
+    if(obj === null) return obj;    //null也是一个空对象
+    if(obj instanceof Date) return new Date(obj);   //判断日期和正则
+    if(obj instanceof RegExp) return RegExp(obj);
+    if(typeof obj !== 'object') return obj;
+    for(let key in obj){
+        if(obj.hasOwnProperty(key)){
+            copyObj[key] = deepCopy2(obj[key]);
+        }
+
+    }
+    return copyObj;
+}
+
+//深拷贝还可以用JSON.parse(JSON.stringify(obj))  但是缺点是函数不拷贝，正则也不拷贝
+
+//浅拷贝
+let shallowCopy = (oldObj)=>{
+    let newObj = {};
+    for(let i in oldObj){
+        if(oldObj.hasOwnProperty(i)){
+            newObj[i] = oldObj[i];
+        }
+
+    }
+    return newObj;
+}
+
+var obj1 = {
+    name: '你的名字',
+    age: 30,
+    hobby:{
+        '体育':'打篮球',
+        '学习':'看书',
+        '生活':'逛街'
+    }
+}
+
+var obj2 = shallowCopy(obj1);
+
+var obj3 = deepCopy({},obj1);
+var obj4 = deepCopy2(obj1)
+
+obj2.name = "变成obj2的名字";
+obj2.hobby['体育']= 'obj2打羽毛球';
+
+
+obj3.name = "变成obj3的名字";
+obj3.hobby['体育'] = 'obj3打羽毛球';
+
+obj4.name = "变成obj4的名字";
+obj4.hobby['体育'] = 'obj4打羽毛球';
+
+console.log(obj1);       //对于obj2的浅拷贝，name没有变，还是原来的"你的名字"  对象中的"体育"属性变了，变成了和obj2改的一样的   对于obj3的深拷贝，都没有变，两者互不影响
+console.log(obj2);
+console.log(obj3);
+console.log(obj4);
+```
 
 
 
@@ -266,7 +346,15 @@ function fn(){}()  //错误的，解析器会理解成一个函数定义，后�
 
 # 遍历数组的方式
 
-# reduce方法
+## ForEach()方法
+
+
+
+
+
+# 数组的一些方法
+
+## reduce方法
 
 ```javascript
 (1)reduce(function(prev,cur,index,arr){...},init) //有初始值   即当有初始值的时候，prev代表的是init，cur代表的是数组的第一项
@@ -323,7 +411,74 @@ console.log(newArr1(arr2));
 
 ```
 
+## map方法
 
+map() 方法返回一个新数组，数组中的元素为原始数组元素调用函数处理后的值。map()不会对空数组进行检测、不会改变原始数组 。
+
+```javascript
+let arr = [1,2,3,4,5,6,7];
+
+//map方法
+let newArr = arr.map((item,index)=>{return item+index})
+// let newArr = arr.map(function(item,index){return item+index})
+console.log(newArr);      //[1,3,5,7,9,11,13]
+```
+
+## filter方法
+
+ filter用于对数组进行过滤。 它创建一个新数组,新数组中的元素是通过检查指定数组中符合条件的所有元素。 
+
+**注意:**filter()不会对空数组进行检测、不会改变原始数组 。
+
+```javascript
+//filter方法
+let newArr1 = arr.filter(function(item,index){
+    return item>5&&index>5
+})
+console.log(newArr1);  //[7]
+```
+
+## some方法
+
+some() 方法用于检测数组中的元素是否满足指定条件（函数提供）。会依次执行数组的每个元素：
+
+- 如果有一个元素满足条件，则表达式返回*true*   , 剩余的元素不会再执行检测。
+- 如果没有满足条件的元素，则返回false。
+
+**注意：** some() 不会对空数组进行检测，不会改变原始数组。
+
+```javascript
+//some方法
+let obj1 = [
+    {color:'red', fruits:'apple'},
+    {color:'yellow', fruits:'orange'}
+    ]
+let some = obj1.some(function(item,index){
+    return item.color = 'red';
+})
+console.log(some);     //true
+```
+
+## every方法
+
+every() 方法用于检测数组所有元素是否都符合指定条件（通过函数提供）。使用指定函数检测数组中的所有元素：
+
+- 如果数组中检测到有一个元素不满足，则整个表达式返回 *false* ，且剩余的元素不会再进行检测。
+- 如果所有元素都满足条件，则返回 true。
+
+**注意：** every() 不会对空数组进行检测，不会改变原始数组。
+
+```javascript
+//every方法
+let obj1 = [
+    {color:'red', fruits:'apple'},
+    {color:'yellow', fruits:'orange'}
+    ]
+let every = obj1.every(function(item,index){
+    return item.color = 'red';
+})
+console.log(every);   //false
+```
 
 # 数组扁平化处理
 
@@ -378,18 +533,37 @@ let newArr = (arr)=>{
 console.log(newArr(arr1));
 ```
 
-# 原型链的继承
+# 原型链
 
 ```javascript
 function Person() {
 
 }
-var person = new Person();
-console.log(person.__proto__ == Person.prototype) // true
+var person1 = new Person();
+var person2 = new Person();
+console.log(person1.__proto__ == Person.prototype) // true
 console.log(Person.prototype.constructor == Person) // true
+console.log(person1.__proto__ ==== person2.__proto__)  //true   同一个构造函数创建的两个实例共享同一个原型对象。
+
+//是否包含指定构造函数的原型
+console.log(person1 instanceof Person);   //true
+console.log(person1 instanceof Object);   //true
+console.log(Person.prototype instanceof Onject);   //true
+
+//注意并不是所有实现都能够对外暴露__proto__，可以使用isPrototypeOf()方法确定两个实例对象与原型对象的关系
+
+console.log(Person.prototype.isPrototypeOf(person1));  //true
+console.log(Person.prototype.isPrototypeOf(person2));   //true
 
 // 顺便学习一个ES5的方法,可以获得对象的原型
-console.log(Object.getPrototypeOf(person) === Person.prototype) // true
+console.log(Object.getPrototypeOf(person1) === Person.prototype) // true
+
+//hasOwnProperty()方法用于确定某个属性是在实例上还是在原型对象上，来自自身的对象上则会返回true，如果来自原型对象上，则会返回false
+
+//想要列出某对象的所有实例属性,无论是否可以枚举
+let keys = Object.getOwnPropertyNames(person1);  
+//想要列出某对象上的可以枚举的实例属性
+let keys = Object.keys(person1);
 ```
 
 **原型链的弊端**是：
@@ -397,3 +571,37 @@ console.log(Object.getPrototypeOf(person) === Person.prototype) // true
 1.当两个实例对象指向同一个原型的时候，改变其中一个实例对象中的属性，另一个实例对象也会跟着改变。
 
 2.并没有实现super功能（对父类传参）。
+
+# 继承
+
+## 原型链继承
+
+
+
+## 构造函数继承
+
+
+
+## 组合继承
+
+
+
+## 原型式继承
+
+
+
+## 寄生式继承
+
+
+
+## 寄生组合式继承
+
+# new一个对象的过程
+
+因此new操作符创建对象可以分为以下四个步骤：
+
+- 在内存中创建一个空对象
+- 将所创建对象的__proto__属性值设为构造函数的prototype的属性值
+- 构造函数内部的this指向该对象
+- 执行构造函数内部的代码（给新对象添加属性）
+- 返回对象
