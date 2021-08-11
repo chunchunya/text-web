@@ -1,3 +1,7 @@
+# js的基本数据类型
+
+Undefined,Null,String,Number,Boolean,Bigint,Symbol
+
 # this的指向问题
 
 直接使用函数，this指向全局。对象调用函数，this指向对象。
@@ -31,8 +35,6 @@ b.say();         // b.say.call(b) === 123
 ```
 
 　this永远指向的是最后调用它的对象，也就是看它**执行**的时候是谁调用的，上式中虽然函数say是被对象a所引用，但是在将say赋值给变量fun的时候并没有执行,所以最终指向的是window，这和下一行是不一样的，a.say()是直接执行了say函数。
-
-
 
 **箭头函数**中本身没有this，导致它会从上一级代码块中寻找this，继承自父执行上下文中的this。
 
@@ -197,10 +199,6 @@ console.log(obj4);
 
 简单理解闭包就是函数里面return函数。
 
-
-
-
-
 # 防抖节流(待补充)
 
 **防抖：**当持续触发事件（比如键盘一直输入内容），一定时间内没有再触发事件（键盘抬起了并且满足在一定时间内没有再按下去），事件处理函数才会执行一次。
@@ -222,8 +220,6 @@ console.log(obj4);
 ![image-20210729183943221](../source/images/js%E5%9F%BA%E7%A1%80/image-20210729183943221.png)
 
 ![image-20210729183954587](../source/images/js%E5%9F%BA%E7%A1%80/image-20210729183954587.png)
-
-
 
 # apply、call、bind的用法和区别
 
@@ -297,8 +293,6 @@ cat.sayHi.bind(mouse, 10, "cheese")()  // hi，I am Jerry,10 years old,I like ch
 ```javascript
 let arr = Array.prototype.slice.call(伪数组)//可以将伪数组转化为z真正的数组
 ```
-
-
 
 # js 的事件循环机制
 
@@ -533,7 +527,15 @@ let newArr = (arr)=>{
 console.log(newArr(arr1));
 ```
 
+# 原型
+
+每个函数都会创建一个prototype属性，这个属性是一个对象，这个对象就是通过调用构造函数创建的对象的原型。
+
+**使用原型的好处**就是，在它上面定义的属性和方法可以被构造函数创建的所有对象实例共享。
+
 # 原型链
+
+每个对象实例都会在其内部初始化一个属性，就是prototype(原型)，当我们访问一个对象的属性时，如果这个对象内部不存在这个属性，那么他就会去prototype里找这个属性，这个prototype又会有自己的prototype（可能是另一个构造函数的实例对象），于是就这样一直找下去，也就是我们平时所说的原型链的概念。
 
 ```javascript
 function Person() {
@@ -560,6 +562,7 @@ console.log(Object.getPrototypeOf(person1) === Person.prototype) // true
 
 //hasOwnProperty()方法用于确定某个属性是在实例上还是在原型对象上，来自自身的对象上则会返回true，如果来自原型对象上，则会返回false
 
+
 //想要列出某对象的所有实例属性,无论是否可以枚举
 let keys = Object.getOwnPropertyNames(person1);  
 //想要列出某对象上的可以枚举的实例属性
@@ -572,29 +575,230 @@ let keys = Object.keys(person1);
 
 2.并没有实现super功能（对父类传参）。
 
+# instanceof原理
+
+**instanceof**用来判断构造函数的 prototype 属性是否在对象原型链上。
+
+换句话说：
+
+①用于判断某个实例是否属于某构造函数
+
+②在继承关系中用来判断一个实例是否属于它的父类型或者祖先类型的实例。
+
+### 手写instanceof
+
+```javascript
+let baseType = ['undefined','null','string','number','boolean','bigInt','symbol']
+// 变量R的原型 存在于 变量L的原型链上
+let instance_of = (L,R)=>{
+    // 验证如果为基本数据类型，就直接返回false
+    if(baseType.includes(typeof(L))){
+        return false;
+    }
+    let RP = R.prototype;    // 取 R 的显示原型
+    L = L.__proto__;         // 取 L 的隐式原型
+    while(true){             // 无线循环的写法（也可以使 for(;;) ）
+        if(L === null){      // 找到最顶层
+            return false;
+        }
+        if(L === RP){        // 严格相等
+            return true;
+        }
+        L = L.__proto__;     // 没找到继续向上一层原型链查找
+    }
+}
+```
+
 # 继承
 
 ## 原型链继承
 
+```javascript
+function Parent () {
+    this.name = 'kevin';
+}
+Parent.prototype.getName = function () {
+    console.log(this.name);
+}
+function Child () {
+    
+}
+Child.prototype = new Parent();
+var child1 = new Child();
+console.log(child1.getName()) // kevin
+```
 
+运用原型链继承的**缺点**：引用类型的属性被所有实例共享。比如：
 
-## 构造函数继承
+```javascript
+function Parent () {
+    this.names = ['kevin', 'daisy'];
+}
+function Child () {
 
+}
+Child.prototype = new Parent();
+var child1 = new Child();
+child1.names.push('yayu');
+console.log(child1.names); // ["kevin", "daisy", "yayu"]
+var child2 = new Child();
+console.log(child2.names); // ["kevin", "daisy", "yayu"]
+```
 
+## 盗用构造函数（经典继承）
+
+```javascript
+function Parent () {
+    this.names = ['kevin', 'daisy'];
+}
+function Child () {
+    Parent.call(this);
+}
+var child1 = new Child();
+child1.names.push('yayu');
+console.log(child1.names); // ["kevin", "daisy", "yayu"]
+var child2 = new Child();
+console.log(child2.names); // ["kevin", "daisy"]
+```
+
+**优点：**
+
+1.避免了引用类型的属性被所有实例共享
+
+2.可以在 Child 中向 Parent 传参,比如：
+
+```javascript
+function Parent (name) {
+    this.name = name;
+}
+function Child (name) {
+    Parent.call(this, name);
+}
+var child1 = new Child('kevin');
+console.log(child1.name); // kevin
+var child2 = new Child('daisy');
+console.log(child2.name); // daisy
+```
+
+缺点：1.必须在构造函数中定义方法，因此函数不能重用
+
+​			2.子类也不能访问父类原型上定义的方法，因此所有类型只能使用构造函数模式。
 
 ## 组合继承
 
+结合了原型链和盗用构造函数的优点。基本思路是使用原型链继承原型上的属性和方法，而通过盗用构造函数继承实例属性。**这样既可以把方法定义在原型上以实现重用，又可以让每个实例都有自己的属性。**是javascript中使用最多的继承模式。
 
+```javascript
+function Parent (name) {
+    this.name = name;
+    this.colors = ['red', 'blue', 'green'];
+}
+
+Parent.prototype.getName = function () {
+    console.log(this.name)
+}
+
+function Child (name, age) {
+
+    Parent.call(this, name);
+    
+    this.age = age;
+
+}
+
+Child.prototype = new Parent();
+
+var child1 = new Child('kevin', '18');
+
+child1.colors.push('black');
+
+console.log(child1.name); // kevin
+console.log(child1.age); // 18
+console.log(child1.colors); // ["red", "blue", "green", "black"]
+
+var child2 = new Child('daisy', '20');
+
+console.log(child2.name); // daisy
+console.log(child2.age); // 20
+console.log(child2.colors); // ["red", "blue", "green"]
+```
 
 ## 原型式继承
 
+本质上，object（）是对传入的对象执行了一次浅复制。将传入的对象作为创建的对象的原型。非常适合不需要单独创建构造函数，但仍然需要在对象间共享信息的场合。
 
+```javascript
+function createObj(o) {   //也可以是function object(o){ };
+    function F(){}
+    F.prototype = o;
+    return new F();
+}
+```
+
+缺点：包含引用类型的属性值始终都会共享相应的值，这点跟原型链继承一样。
+
+```javascript
+var person = {
+    name: 'kevin',
+    friends: ['daisy', 'kelly']
+}
+
+var person1 = createObj(person);
+var person2 = createObj(person);
+
+person1.name = 'person1';
+console.log(person2.name); // kevin
+
+person1.firends.push('taylor');
+console.log(person2.friends); // ["daisy", "kelly", "taylor"]
+```
+
+**注意**：修改`person1.name`的值，`person2.name`的值并未发生改变，并不是因为`person1`和`person2`有独立的 name 值，而是因为`person1.name = 'person1'`，给`person1`添加了 name 值，并非修改了原型上的 name 值。
 
 ## 寄生式继承
+
+创建一个仅用于封装继承过程的函数，该函数在内部以某种形式来做增强对象，最后返回对象。
+
+```javascript
+function createObj (o) {
+    var clone = Object.create(o);    //通过调用函数创建一个新对象
+    clone.sayName = function () {    //以某种方式增强这个对象
+        console.log('hi');
+    }
+    return clone;
+}
+```
+
+**缺点**：跟借用构造函数模式一样，每次创建对象都会创建一遍方法。
 
 
 
 ## 寄生组合式继承
+
+组合继承最大的缺点是会调用两次父构造函数。
+
+而寄生组合式继承只调用一次父构造函数。基本思路式不通过调用父类构造函数给子类原型赋值，而是鱼的父类原型的一个副本。（使用寄生式继承来继承父类原型，然后将返回的新对象赋值给子类原型）
+
+```javascript
+function object(o) {
+    function F() {}
+    F.prototype = o;
+    return new F();
+}
+
+function prototype(child, parent) {
+    var prototype = object(parent.prototype);
+    prototype.constructor = child;
+    child.prototype = prototype;
+}
+
+// 当我们使用的时候：
+prototype(Child, Parent);
+```
+
+这种方式的高效率体现它只调用了一次 Parent 构造函数，并且因此避免了在 Parent.prototype 上面创建不必要的、多余的属性。与此同时，原型链还能保持不变；因此，还能够正常使用 instanceof 和 isPrototypeOf。
+
+寄生式组合继承可以算是**引用类型**继承的最佳模式。
 
 # new一个对象的过程
 
@@ -605,3 +809,4 @@ let keys = Object.keys(person1);
 - 构造函数内部的this指向该对象
 - 执行构造函数内部的代码（给新对象添加属性）
 - 返回对象
+
