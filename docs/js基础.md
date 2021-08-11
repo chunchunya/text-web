@@ -810,3 +810,46 @@ prototype(Child, Parent);
 - 执行构造函数内部的代码（给新对象添加属性）
 - 返回对象
 
+# JSON
+
+Json语法支持表示**3**种类型的值。
+
+- 简单值: 字符串、数值、布尔值和null
+- 对象：Json中的对象必须使用双引号把属性名包围起来。（没有变量声明，最后没有分号）
+- 数组：（没有变量，没有分号）
+
+JSON对象有两个方法：**stringify()**和**parse()**。分别为：将Javascript序列化为JSON字符串，以及将JSON解析为原生JavaScript值。
+
+JSON.stringify()方法除了第一个参数之外（需要序列化的对象），还可以额外接收两个参数，第二个参数可以是一个数组（起过滤作用），也可以是一个函数（函数内接收key和value两个参数，主要也是起过滤作用）；第三个参数控制缩进和空格，在这个参数是数值时，表示每一级缩进的空格数。
+
+JSON.parse()方法也可以接受一个额外的参数。（一个函数包含key和value两个参数）
+
+# Ajax原理
+
+Ajax在用户和服务器之间加了一个**中间层**（AJAX引擎），通过XMLHttpRequest对象来向服务器发**异步请求**，从服务器获取数据，然后用javascript来操作DOM而更新页面。Ajax的过程只涉及Javascript、XMLHttpRequest和DOM。**XMLHttpRequest是Ajax的核心机制**。
+
+发送Ajax请求的五个步骤（XMLHttpRequest的工作原理）：
+
+1. 创建XMLHttpRequest对象
+2. 使用open方法设置请求的参数 ——open（method,url,是否异步）
+3. 发送请求
+4. 注册事件——注册onreadystatechange事件，状态改变时就会调用
+5. 获取返回的数据，更新UI
+
+```javascript
+let xhr = new XMLHttpRequest();
+xhr.onreadystatechange = function(){
+    if(xhr.readyState === 4){   // readyState有0,1,2,3,4五种状态
+        if((xhr.status>=200 && xhr.status<300)||xhr.status === 304){
+            alert(xhr.responseText);
+        }else{
+            alert("加载失败"+xhr.status)
+        }
+    }
+}
+xhr.open("get","url",true/false);//是否异步 
+xhr.send(null);
+
+```
+
+注意：这里为了保证跨浏览器兼容。onreadystatechange事件处理程序应该在调用open()之前赋值。
