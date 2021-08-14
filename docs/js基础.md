@@ -353,7 +353,7 @@ function fn(){}()  //错误的，解析器会理解成一个函数定义，后�
 ```javascript
 (1)reduce(function(prev,cur,index,arr){...},init) //有初始值   即当有初始值的时候，prev代表的是init，cur代表的是数组的第一项
 
-(2)reduce(function(prev,cyr,index,arr){...})  //无初始值  即当没有初始值的时候，prev代表的是数组的第一项，cur代表的是数组的第二项
+(2)reduce(function(prev,cur,index,arr){...})  //无初始值  即当没有初始值的时候，prev代表的是数组的第一项，cur代表的是数组的第二项
 ```
 
 arr: 表示原数组；
@@ -852,4 +852,21 @@ xhr.send(null);
 
 ```
 
-注意：这里为了保证跨浏览器兼容。onreadystatechange事件处理程序应该在调用open()之前赋值。
+注意：这里为了保证跨浏览器兼容。onreadystatechange事件处理程序应该在调用open()之前赋值。如上代码所示。
+
+发送额外的请求**头部**，可以使用XMLHttpRequest对象的**setRequestHeader()**方法（方法接收两个参数：头部字段的名称和值），必须在open()之后，send()之前调用。
+
+可以使用XMLHttpRequest对象的getResponseHeader()方法从XMLHttpRequest对象获取响应头部（只要传入想要获取头部的名称即可）。若想取得所有响应头部，可以使用getAllRequestHeaders()方法。
+
+## 发送get请求时，URL后面添加查询字符串参数的方法
+
+可以使用下面的函数将查询字符串参数添加到现有的URL末尾(查询字符串中的每个名和值都必须使用endodeURIComponent()编码)：
+
+```javascript
+function addURLParam(url,name,value){
+    url += (url.indexOf("?") === -1 ? "?":"&");
+    url += encodeURIComponent(name)+"="+encodeURIComponent(value);
+    return url;
+}
+```
+
