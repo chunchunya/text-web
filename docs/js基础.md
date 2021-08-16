@@ -913,8 +913,6 @@ class Dog extends Animal{
 }
 ```
 
-
-
 # new一个对象的过程
 
 因此new操作符创建对象可以分为以下四个步骤：
