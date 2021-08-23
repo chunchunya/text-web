@@ -40,6 +40,71 @@ b.say();         // b.say.call(b) === 123
 
 ![image-20210729183633968](../source/images/js%E5%9F%BA%E7%A1%80/image-20210729183633968.png)
 
+ this 没有作用域的限制，这点和变量不一样，所以嵌套函数不会从调用它的函数中继承 this，这样会造成很多不符合直觉的代码。要解决这个问题，你可以有两种思路：
+
+- 第一种是把 this 保存为一个 self 变量，再利用变量的作用域机制传递给嵌套函数。
+- 第二种是继续使用 this，但是要把嵌套函数改为箭头函数，因为箭头函数没有自己的执行上下文，所以它会继承调用函数中的 this
+
+例如：
+
+```javascript
+var myObj = {
+  name : " 极客时间 ", 
+  showThis: function(){
+    console.log(this)
+    function bar(){console.log(this)}   
+    bar()
+  }
+}
+myObj.showThis()
+```
+
+执行这段代码后，你会发现函数 bar 中的 this 指向的是全局 window 对象，而函数 showThis 中的 this 指向的是 myObj 对象。
+
+可以通过一个小技巧来解决这个问题，比如在 showThis 函数中声明一个变量 self 用来保存 this，然后在 bar 函数中使用 self，代码如下所示：
+
+```js
+var myObj = {
+  name : " 极客时间 ", 
+  showThis: function(){
+    console.log(this)
+    var self = this
+    function bar(){
+      self.name = " 极客邦 "
+    }
+    bar()
+  }
+}
+myObj.showThis()
+console.log(myObj.name)
+console.log(window.name)
+```
+
+执行这段代码，可以看到它输出了我们想要的结果，最终 myObj 中的 name 属性值变成了“极客邦”。其实，这个方法的的本质是把 this 体系转换为了作用域的体系。
+
+其实，也可以使用 ES6 中的箭头函数来解决这个问题，结合下面代码：
+
+```js
+var myObj = {
+  name : " 极客时间 ", 
+  showThis: function(){
+    console.log(this)
+    var bar = ()=>{
+      this.name = " 极客邦 "
+      console.log(this)
+    }
+    bar()
+  }
+}
+myObj.showThis()
+console.log(myObj.name)
+console.log(window.name)
+```
+
+执行这段代码，会发现它也输出了我们想要的结果，也就是箭头函数 bar 里面的 this 是指向 myObj 对象的。这是因为 ES6 中的箭头函数并不会创建其自身的执行上下文，所以箭头函数中的 this 取决于它的外部函数。
+
+
+
 # 深拷贝浅拷贝
 
 **浅拷贝**是创建一个新对象，这个对象有着原始对象属性的一份精确拷贝。**如果属性是基本类型，拷贝的就是基本类型的值**，如果属性是引用类型，拷贝的就是内存地址，所以其中一个对象改变了这个地址，就会影响到另一个对象。（浅拷贝，旧对象的属性都拷给新对象了，当属性值是基本类型数据时，如果新对象改变此属性值，则不影响旧对象，当属性值时引用类型数据时，由于拷贝的时内存地址，所以两个对象指向相同的地址，会互相影响）
@@ -144,8 +209,6 @@ console.log(obj3);
 console.log(obj4);
 ```
 
-
-
 # js的作用域
 
 作用域说明:一般理解**指一个变量的作用范围**
@@ -167,7 +230,7 @@ console.log(obj4);
 - 在函数作用域中可以访问到全局作用域的变量,在函数外无法访问到函数作用域内的变量
 - 在函数作用域中访问变量、函数时,会先在自身作用域中寻找,若没有找到,则会到函数的上一级作用域中寻找,一直到全局作用域
 
-3、块级作用域
+3、块级作用域（ES6）
 
 ## **作用域的深层次理解**
 
@@ -195,9 +258,11 @@ console.log(obj4);
 
 预编译完进行解释执行操作。
 
-# 闭包
+# 闭包（还是有些不太理解）
 
 简单理解闭包就是函数里面return函数。
+
+在 JavaScript 中，根据词法作用域的规则，内部函数总是可以访问其外部函数中声明的变量，当通过调用一个外部函数返回一个内部函数后，即使该外部函数已经执行结束了，但是内部函数引用外部函数的变量依然保存在内存中，我们就把这些变量的集合称为闭包。
 
 # 防抖节流(待补充)
 
@@ -344,10 +409,6 @@ function fn(){}()  //错误的，解析器会理解成一个函数定义，后�
 
 # 遍历数组的方式
 
-## ForEach()方法
-
-
-
 
 
 # 数组的一些方法
@@ -477,6 +538,10 @@ let every = obj1.every(function(item,index){
 })
 console.log(every);   //false
 ```
+
+# forEach()方法
+
+和**map方法**类似，唯一的**区别**就是forEach方法没有返回值，是直接在数组本身上进行修改，而map方法是生成一个改后的新数组。
 
 # 数组扁平化处理
 
@@ -983,3 +1048,6 @@ function addURLParam(url,name,value){
 }
 ```
 
+# Promise
+
+promise.all

@@ -1,6 +1,17 @@
+# vue和react的区别
+
+
+
 # 简述MVVM
 
-**MVVM**是`Model-View-ViewModel`缩写，也就是把`MVC`中的`Controller`演变成`ViewModel。Model`层代表数据模型，`View`代表UI组件，`ViewModel`是`View`和`Model`层的桥梁，数据会绑定到`viewModel`层并自动将数据渲染到页面中，视图变化的时候会通知`viewModel`层更新数据。
+**MVVM**是`Model-View-ViewModel`缩写，也就是把`MVC`中的`Controller`演变成`ViewModel。Model`层代表数据模型，`View`代表UI组件，`ViewModel`是`View`和`Model`层的桥梁，它有两个方向，第一将后端传来的数据转换成页面可以看到的视图，第二，将用户在页面上的交互转化成为后端数据我们称之为双向绑定。
+**也可以这么说：**视图和模型是不能直接通信的，它们通过ViewModel来通信，ViewModel通常要实现一个observer观察者，当数据发生变化，ViewModel能够监听到数据的这种变化，然后通知到对应的视图做自动更新，而当用户操作视图时，ViewModel也能监听到视图的变化，然后通知数据做改动，这实际上就实现了数据的双向绑定。
+
+# 对VUE的渐进式框架如何理解
+
+从技术方面来说，可以根据自己的业务来选择你需要的vue功能模块。就是用你想用或者能用的功能特性，你不想用的部分功能可以先不用。VUE不强求你一次性接受并使用它的全部功能特性。
+
+可参考：[渐进式的理解](https://blog.csdn.net/wangzunkuan/article/details/80729683?utm_medium=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7EBlogCommendFromMachineLearnPai2%7Edefault-1.essearch_pc_relevant&depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7EBlogCommendFromMachineLearnPai2%7Edefault-1.essearch_pc_relevant)
 
 # VUE生命周期函数
 
@@ -18,6 +29,8 @@ PS：可以在beforeDestroy里**清除定时器、或清除事件绑定**。
 # 什么是虚拟DOM？
 
 虚拟dom 是相对于浏览器所渲染出来的真实dom 的，在react，vue 等技术出现之前， 我们要改变页面展示的内容只能通过遍历查询dom 树的方式找到需要修改的dom 然 后修改样式行为或者结构，来达到更新ui 的目的。 这种方式相当消耗计算资源，因为每次查询dom 几乎都需要遍历整颗dom 树，如果 建立一个与dom 树对应的虚拟dom 对象（ js 对象），以对象嵌套的方式来表示dom 树，那么每次dom 的更改就变成了js 对象的属性的更改，这样一来就能查找js 对象的属性变化要比查询dom 树的性能开销小。
+
+# 怎么理解Vue中的diff算法
 
 # computed和watch的区别
 
@@ -37,4 +50,162 @@ watch监听数据，有关联但是没有依赖，只要某个数据发生变化
 
 ### 父子组件之间的传值
 
+(1) 父传子：props ||子传父：$emit()
+
+(2) parent和chilren
+
 ### 兄弟组件之间传值
+
+(1)event Bus
+
+[参考文章](https://juejin.cn/post/6844903887162310669)
+
+# 常用指令
+
+v-model：数据绑定；
+
+v-for：循环； 格式：v-for=“字段名 in(of)数组json"；
+
+v-show: 显示隐藏   传递值为布尔值 true  false  默认false；
+
+v-if：显示与隐藏；（v-show对比区别就是是否删除dom节点，默认是false）
+
+v-else-if：必须和v-if连用，不能单独使用否则报错，模版编译错误；
+
+v-bind：动态绑定；作用：及时对页面的数据进行更改；可用：代替
+
+v-on：绑定事件，函数必须写在methods里面；（@click快捷写法）
+
+v-text：解析文本；
+
+v-bind：class；
+
+v-once：进入页面时，只渲染一次，不再进行渲染；
+
+v-cloak：防止闪烁；
+
+v-pre：把标签内部的元素原位输出；
+
+**插播**：data：返回对象用return
+
+# v-if和v-show的区别
+
+v-if是条件渲染，是真正的渲染，表示dom节点是否存在。
+
+v-show是隐藏显示，表示dom节点一直存在，只是存在的方式不同（或隐藏或显示）。
+
+如果需要频繁切换显示/隐藏的可以用v-show;如果运行后不太可能需要切换显示/隐藏的可以用v-if；
+
+# v-model的实现原理
+
+v-model主要提供了两个功能，view层输入值影响data的属性值，data属性值发生改变会更新view层的数值变化。`v-model`是语法糖，默认情况下相于:`value和@input`。
+
+其核心就是，一方面modal层通过defineProperty来劫持每个属性，一旦监听到变化通过相关的页面元素更新。另一方面通过编译模板文件，为控件的v-model绑定input事件，从而页面输入能实时更新相关data属性值。
+
+v-model是什么
+
+v-model就是vue的双向绑定的指令，能将页面上控件输入的值同步更新到相关绑定的data属性，也会在更新data绑定属性时候，更新页面上输入控件的值。
+
+为什么使用v-model
+
+v-model作为双向绑定指令也是vue两大核心功能之一，使用非常方便，**提高前端开发效率**。在view层，model层相互需要数据交互，即可使用v-model。
+
+[参考文章](https://www.jianshu.com/p/2012c26b6933)
+
+# 双向绑定实现原理
+
+当一个**Vue**实例创建时，Vue会遍历data选项的属性，用 **Object.defineProperty** 将它们转为 getter/setter并且在内部追踪相关依赖，在属性被访问和修改时通知变化。
+
+每个组件实例都有相应的 watcher 程序实例，它会在组件渲染的过程中把属性记录为依赖，之后当依赖项的 setter 被调用时，会通知 watcher重新计算，从而致使它关联的组件得以更新。
+
+**梳理：**
+
+首先我们为每个vue属性用Object.defineProperty()实现数据劫持，为每个属性分配一个订阅者集合的管理数组dep；然后在编译的时候在该属性的数组dep中添加订阅者，v-model会添加一个订阅者，{{}}也会，v-bind也会，只要用到该属性的指令理论上都会，接着为input会添加监听事件，修改值就会为该属性赋值，触发该属性的set方法，在set方法内通知订阅者数组dep，订阅者数组循环调用各订阅者的update方法更新视图。
+
+# v-for中key的作用
+
+key主要用在Vue的虚拟DOM算法，用来对比新旧节点。如果不使用key，Vue 会使用一种最大限度减少动态元素并且尽可能的尝试就地修改/复用相同类型元素的算法。而使用key时，它会基于key 的变化重新排列元素顺序，并且会移除key 不存在的元素。
+
+作用：v-for中key的作用主要是为了更高效的对比更新虚拟dom。
+
+原理：vue在执行diff算法比较两个虚拟dom节点是否是相同节点时，会先看key是否相同，再看标签类型等是否相同。
+
+注意：实际开发过程中渲染一组列表时，key必须设置（节省性能），且应该尽量避免使用索引作为key（有的时候列表发生排序），这样容易导致一些隐藏bug。
+
+# vue项目中package.json属性
+
+部分截图如下：
+
+![image-20210823195111421](../source/images/vue/image-20210823195111421.png)
+
+包括项目名字、版本、描述、作者、是否私有。还包括其他一些属性，即
+
+```
+scripts：支持的脚本，默认是一个空的test
+dependencies: 生产环境依赖包列表
+devDependencies: 开发环境、测试环境依赖包列表
+engines: 声明项目需要的node或npm版本范围
+browserslist: 支持的浏览器列表
+```
+
+# NextTick的实现
+
+# keep-alive的实现
+
+# 做过哪些性能优化
+
+```js
+编码阶段
+尽量减少data中的数据，data中的数据都会增加getter和setter，会收集对应的watcher
+v-if和v-for不能连用
+如果需要使用v-for给每项元素绑定事件时使用事件代理
+SPA 页面采用keep-alive缓存组件
+在更多的情况下，使用v-if替代v-show
+key保证唯一
+使用路由懒加载、异步组件
+防抖、节流
+第三方模块按需导入
+长列表滚动到可视区域动态加载
+图片懒加载
+SEO优化
+预渲染
+服务端渲染SSR
+打包优化
+压缩代码
+Tree Shaking/Scope Hoisting
+使用cdn加载第三方模块
+多线程打包happypack
+splitChunks抽离公共文件
+sourceMap优化
+用户体验
+骨架屏
+PWA
+还可以使用缓存(客户端缓存、服务端缓存)优化、服务端开启gzip压缩等。
+```
+
+# 实现双向绑定 Proxy 与 Object.defineProperty 相比优劣如何?
+
+1. **Object.definedProperty**的作用是劫持一个对象的属性，劫持属性的getter和setter方法，在对象的属性发生变化时进行特定的操作。而 Proxy劫持的是整个对象。
+2. **Proxy**会返回一个代理对象，我们只需要操作新对象即可，而Object.defineProperty只能遍历对象属性直接修改。
+3. **Object.definedProperty**不支持数组，更准确的说是不支持数组的各种API，因为如果仅仅考虑arry[i] = value 这种情况，是可以劫持的，但是这种劫持意义不大。而Proxy可以支持数组的各种API。
+4. 尽管Object.defineProperty有诸多缺陷，但是其兼容性要好于Proxy。
+
+[参考文章](https://blog.csdn.net/wangzunkuan/article/details/80729683?utm_medium=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7EBlogCommendFromMachineLearnPai2%7Edefault-1.essearch_pc_relevant&depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7EBlogCommendFromMachineLearnPai2%7Edefault-1.essearch_pc_relevant)
+
+# 你知道Vue3有哪些新特性吗？它们会带来什么影响？
+
+- **性能提升**
+
+更小巧、更快速 支持自定义渲染器 支持摇树优化：一种在打包时去除无用代码的优化手段 支持Fragments和跨组件渲染
+
+- **API变动**
+
+模板语法99%保持不变 原生支持基于class的组件，并且无需借助任何编译及各种stage阶段的特性 在设计时也考虑TypeScript的类型推断特性 `重写虚拟DOM`可以期待更多的编译时提示来减少运行时的开销 `优化插槽生成`可以单独渲染父组件和子组件 `静态树提升`降低渲染成本 `基于Proxy的观察者机制`节省内存开销
+
+- **不兼容IE11**
+
+`检测机制`更加全面、精准、高效,更具可调试式的响应跟踪
+
+# vuex、vue-router的实现原理
+
+# 路由懒加载原理
