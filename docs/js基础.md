@@ -274,6 +274,8 @@ console.log(obj4);
 
 在 JavaScript 中，根据词法作用域的规则，内部函数总是可以访问其外部函数中声明的变量，当通过调用一个外部函数返回一个内部函数后，即使该外部函数已经执行结束了，但是内部函数引用外部函数的变量依然保存在内存中，我们就把这些变量的集合称为闭包。
 
+**总结：指有权访问另一个函数作用域中变量的函数。闭包可以让你从内部函数访问外部函数作用域。**
+
 # 防抖节流(待补充)
 
 **防抖：**当持续触发事件（比如键盘一直输入内容），一定时间内没有再触发事件（键盘抬起了并且满足在一定时间内没有再按下去），事件处理函数才会执行一次。
@@ -383,7 +385,7 @@ console.log(Math.min.apply(Math,mmm));
 
 由于JS是单线程的，为了防止一个函数执行时间过长阻塞后面的代码，引入事件循环机制。所以会先将同步任务压入执行栈中，依次执行，将异步任务推入异步队列，异步队列又分为宏任务队列和微任务队列，因为宏任务队列的执行时间较长，所以微任务队列要优先于宏任务队列（按照代码的层级,同层级先执行微任务其次执行宏任务）。
 
-微任务队列的代表就是**Promise.then，MutationObserver，Process.nextTick**等。宏任务的话就是**setImmediate ，setTimeout ，setInterval， I/O ，UI rendering**等。
+微任务队列的代表就是**Promise.then，MutationObserver，Process.nextTick（Node.js环境下）**等。宏任务的话就是**setImmediate（Node.js环境下） ，setTimeout ，setInterval， I/O ，UI rendering**等。
 
 ```js
 console.log(1)
@@ -417,7 +419,7 @@ function fn(){
 //依次输出 1，4，6，3，8，12，2，11，10，9
 ```
 
-注意promise后面then前面的还是同步任务。
+注意：promise后面then前面的还是同步任务。
 
 # 设计模式
 
@@ -754,6 +756,16 @@ let instance_of = (L,R)=>{
     }
 }
 ```
+
+# 判断对象是哪个类的直接实例
+
+**问题：已知A继承了B，B继承了C。怎么判断 a 是由A直接生成**的实例，还是B直接生成的实例呢？还是C直接生成的实例呢？
+
+分析：这就要用到原型的`constructor`属性了。
+
+- `foo.__proto__.constructor === Foo`的结果为true，但是 `foo.__proto__.constructor === Object`的结果为false。
+
+所以，**用 consturctor判断就比用 instanceof判断，更为严谨**。
 
 # 继承
 
@@ -1152,6 +1164,276 @@ function addURLParam(url,name,value){
 3. Fetch
 4. axios
 
+# 实现异步编程的方式？
+
+- callback 异步解决方案（回调函数（事件监听、发布订阅等都属于回调函数））
+- Promise 异步解决方案（解决回调地狱）
+- async await 语法糖
+- Generator 异步解决方案（遍历对象生成器）
+
+[一文吃透 Js 异步编程](https://juejin.cn/post/6986673391029714958)
+
 # Promise
 
-promise.all
+Promise是一种异步解决方案，Promise对象接受**一个回调函数**作为参数, 该回调函数**接受两个参数**，分别是成功时的回调**resolve**和失败时的回调**reject**；另外resolve的参数除了正常值以外， 还可能是一个Promise对象的实例；reject的参数通常是一个Error对象的实例。
+
+1. 优点就是更好的异步解决方案
+2. 缺点就是无法取消Promise，一旦新建它就会立即执行，无法中途取消
+
+# DOM事件的级别
+
+DOM事件的级别，准确来说，是**DOM标准**定义的级别。包括：
+
+## DOM0
+
+```js
+element.onclick = function () { 
+  // TODO  
+}
+```
+
+## DOM2
+
+##### addEventListener（高版本浏览器）
+
+```js
+element.addEventListener('click', function () { 
+    // TODO
+}, false);
+```
+
+参数解释：
+
+- 参数1：事件名的字符串(注意，没有on)
+- 参数2：回调函数：当事件触发时，该函数会被执行
+- 参数3：**true表示捕获阶段触发，false表示冒泡阶段触发（默认）**。如果不写，则默认为false。
+
+###### 示例：
+
+```html
+<body>
+<button>按钮</button>
+<script>
+    var btn = document.getElementsByTagName("button")[0];
+    btn.addEventListener("click", fn1);
+    btn.addEventListener("click", fn2);
+    function fn1() {
+        console.log("事件1");
+    }
+    function fn2() {
+        console.log("事件2");
+    }
+</script>
+</body>
+// 输出： 事件1
+//       事件2
+```
+
+`addEventListener()`这种绑定事件的方式：
+
+- 一个元素的一个事件，可以绑定多个响应函数。**不存在响应函数被覆盖的情况**。执行顺序是：**事件被触发时，响应函数会按照函数的绑定顺序执行。**
+- **addEventListener()中的this，是绑定事件的对象**。
+- `addEventListener()`不支持 IE8 及以下的浏览器。在IE8中可以使用`attachEvent`来绑定事件。
+
+##### attachEvent（IE8及以下版本浏览器）
+
+```javascript
+element.attachEvent('onclick', function () {
+    // TODO
+});
+```
+
+参数解释：
+
+- 参数1：事件名的字符串(注意，有on)
+- 参数2：回调函数：当事件触发时，该函数会被执行
+
+###### 示例：
+
+```html
+<body>
+  <button>按钮</button>
+<script>
+  var btn = document.getElementsByTagName('button')[0];
+  btn.attachEvent('onclick', function() {
+    console.log('事件1');
+  });
+
+  btn.attachEvent('onclick', function() {
+    console.log('事件2');
+  });
+</script>
+</body>
+// 输出：事件2
+//      事件1
+```
+
+`attachEvent()`这种绑定事件的方式：
+
+- 一个元素的一个事件，可以绑定多个响应函数。**不存在响应函数被覆盖的情况**。**注意**：执行顺序是，后绑定的先执行。
+- **attachEvent()中的this，是window**。
+
+##### 兼容代码
+
+```html
+<body>
+  <button>按钮</button>
+<script>
+  var btn = document.getElementsByTagName('button')[0];
+  myBind(btn , "click" , function(){
+    alert(this);
+  });
+
+  /*
+  * 参数：
+  *  element 要绑定事件的对象
+  *  eventStr 事件的字符串(不要on)
+  *  callback 回调函数
+  */
+  function myBind(element , eventStr , callback){
+    if(element.addEventListener){
+      //大部分浏览器兼容的方式
+      element.addEventListener(eventStr , callback , false);
+    }else{
+      //IE8及以下
+      element.attachEvent("on"+eventStr , function(){
+        //在匿名函数 function 中调用回调函数callback
+        callback.call(element);
+      });
+    }
+  }
+</script>
+</body>
+```
+
+#### DOM3
+
+```js
+element.addEventListener('keyup', function () {
+    // TODO
+}, false);
+```
+
+DOM3中，增加了很多事件类型，比如鼠标事件、键盘事件等。
+
+***PS：*为何事件没有DOM1的写法呢？因为，DOM1标准制定的时候，没有涉及与事件相关的内容。**
+
+# DOM事件模型
+
+DOM事件模型讲的就是**捕获和冒泡**。先捕获，再到目标，再冒泡 。捕获是事件会从最外层开始发生，直到最具体的元素。冒泡是事件会从最内层的元素开始发生，一直向上传播，直到window对象。
+
+捕获阶段：事件依次传递的顺序是从 window -> document -> html -> body -> ...(父元素 -> 子元素)-> 目标元素。
+
+冒泡的流程与捕获相反。
+
+# Event 对象常见应用
+
+用户做的是什么操作（比如，是敲键盘了，还是点击鼠标了），这些事件基本都是通过Event对象拿到的。
+
+## 阻止默认事件
+
+```js
+ event.preventDefault();
+```
+
+比如，已知`<a>`标签绑定了click事件，此时，如果给`<a>`设置了这个方法，就阻止了链接的默认跳转。
+
+### 阻止冒泡
+
+w3c的方法：（火狐、谷歌、IE11）
+
+```js
+event.stopPropagation();
+```
+
+IE10以下则是：
+
+```js
+event.cancelBubble = true;
+```
+
+兼容代码如下：
+
+```js
+// 对box进行了阻止冒泡，事件不会向上冒泡传递到父元素、body、html、document、window
+box.onclick = function (event) {
+  alert("child");
+  //阻止冒泡
+  event = event || window.event;
+  if (event && event.stopPropagation) {
+      event.stopPropagation();
+  } else {
+    event.cancelBubble = true;
+    }
+}
+```
+
+经常在业务场景中遇到。
+
+### 设置事件优先级
+
+```js
+event.stopImmediatePropagation();
+```
+
+场景：我用addEventListener给某按钮同时注册了事件A、事件B。此时，如果我单击按钮，就会依次执行事件A和事件B。现在要求：单击按钮时，只执行事件A，不执行事件B。该怎么做呢？这是时候，就可以用到`stopImmediatePropagation`方法了。做法是：在事件A的响应函数中加入该语句。
+
+### event 属性
+
+event 有很多属性，常见属性有如下：
+
+```js
+ event.currentTarget   //当前所绑定的事件对象。在事件委托中，指的是【父元素】。
+event.target  //当前被点击的元素。在事件委托中，指的是【子元素】。
+```
+
+![img](../source/images/js%E5%9F%BA%E7%A1%80/20180203_1739.png)
+
+由于pageX 和 pageY的兼容性不好，我们可以这样做：
+
+- 鼠标在页面的位置 = 滚动条滚动的距离 + 可视区域的坐标。
+
+# 事件委托
+
+通俗地来讲，就是把一个元素响应事件（click、keydown......）的函数委托到另一个元素。
+
+事件委托是利用了**冒泡机制**，减少了事件绑定的次数，减少内存消耗，提高性能。
+
+# 事件冒泡、捕获(委托)
+
+- **事件冒泡**指在在一个对象上触发某类事件，如果此对象绑定了事件，就会触发事件，如果没有，就会向这个对象的父级对象传播，最终父级对象触发了事件。
+- **事件委托**本质上是利用了浏览器事件冒泡的机制。因为事件在冒泡过程中会上传到父节点，并且父节点可以通过事件对象获取到目标节点，因此可以把子节点的监听函数定义在父节点上，由父节点的监听函数统一处理多个子元素的事件，这种方式称为**事件代理**。
+
+`event.stopPropagation()` 或者 ie下的方法 `event.cancelBubble = true;` //阻止事件冒泡
+
+# offset、client与scroll的区别
+
+- offsetWidth/offsetHeight 返回值包含 content + padding + border，效果与 e.getBoundingClientRect()相同
+- clientWidth/clientHeight 返回值只包含 content + padding，如果有滚动条，也不包含滚动条
+- scrollWidth/scrollHeight 返回值包含 content + padding + 溢出内容的尺寸
+
+# ES6
+
+新增symbol类型 表示独一无二的值，用来定义独一无二的对象属性名;
+
+const/let  都是用来声明变量,不可重复声明，具有块级作用域。存在暂时性死区，也就是不存在变量提升。(const一般用于声明常量);
+
+变量的解构赋值(包含数组、对象、字符串、数字及布尔值,函数参数),剩余运算符(...rest);
+
+模板字符串(`${data}`);
+
+扩展运算符(数组、对象);;
+
+箭头函数;
+
+Set和Map数据结构;
+
+Proxy/Reflect;
+
+Promise;
+
+async函数;
+
+Class;
+
+Module语法(import/export)。
