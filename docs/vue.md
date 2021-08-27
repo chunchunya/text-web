@@ -1,6 +1,19 @@
 # vue和react的区别
 
+相同点：
 
+1. 都有虚拟DOM（Virtual DOM 是一个映射真实DOM的JavaScript对象）
+2. 都提供了响应式和组件化的视图组件。
+
+不同点： Vue 是`MVVM`框架，双向数据绑定，当`ViewModel`对`Model`进行更新时，通过数据绑定更新到`View`。
+
+React是一个单向数据流的库，状态驱动视图。`State --> View --> New State --> New View` `ui = render (data)`。
+
+模板渲染方式不同。React是通过JSX来渲染模板，而Vue是通过扩展的HTML来进行模板的渲染。
+
+组件形式不同，Vue文件里将HTML，JS，CSS组合在一起。react提供class组件和function组
+
+Vue封装好了一些v-if，v-for，React什么都是自己实现，自由度更高。
 
 # 简述MVVM
 
@@ -40,25 +53,27 @@ watch主要监视数据的变化，具有deep和immediate两个属性。
 
 **总括：**computed主要用于同步对数据的处理，而watch主要用域事件的派发，可以异步。computed 和 watch 的使用场景并不一样，computed 的话是**通过几个数据的变化，来影响一个数据，**而 watch，则是可以**一个数据的变化，去影响多个数据。**
 
-computed拥有缓存属性，只有当以来的数据发生变化时，关联的数据才会变化，适用于计算或者格式化数据的场景。应用场景比如：购物车计算总额。
+**computed支持缓存，只有依赖数据结果发生改变，才会重新进行计算，不支持异步操作，如果一个属性依赖其他属性，多对一，一般用computed应用场景比如：购物车计算总额。**
 
-watch监听数据，有关联但是没有依赖，只要某个数据发生变化，就可以处理一些数据或者派发事件并同步/异步执行。应用场景比如：当借款额度超过可借额度时，弹出toast提示。
+**watch数据变，直接触发相应操作，支持异步，监听数据必须`data`中声明过或者父组件传递过来的`props中`的数据，当数据变化时，触发其他操作，函数有两个参数。应用场景比如：当借款额度超过可借额度时，弹出toast提示。**
 
 **computed** 跟 **methods** 里面的方法的区别，computed 的话访问的时候会直接返回已缓存的结果，而不会像 methods 一样再次计算。
 
 # 组件之间传值
 
-### 父子组件之间的传值
+- ### props/$emit+v-on
 
-(1) 父传子：props ||子传父：$emit()
+  父组件通过props的方式向子组件传递数据，而通过$emit 子组件可以向父组件通信
 
-(2) parent和chilren
+- ### eventBus
 
-### 兄弟组件之间传值
+  通过eventBus向中心事件发送或者接收事件，所有事件都可以共用事件中心
 
-(1)event Bus
+- ### vuex
 
-[参考文章](https://juejin.cn/post/6844903887162310669)
+  状态管理模式，采用集中式存储管理应用的所有组件的状态，可以通过vuex管理全局的数据
+
+[参考文章](https://juejin.cn/post/6844903887162310669)    只需要熟悉上面三种即可，其他基本不会用到，可以做为了解。
 
 # 常用指令
 
@@ -88,6 +103,10 @@ v-pre：把标签内部的元素原位输出；
 
 **插播**：data：返回对象用return
 
+# v-if和v-for能不能一起使用
+
+v-for指令的优先级要高于v-if，当处于同一节点时候，意味着v-if将分别重复运行于每个 v-for 循环中，所以应该尽量避免v-for和v-if在同一结点。
+
 # v-if和v-show的区别
 
 v-if是条件渲染，是真正的渲染，表示dom节点是否存在。
@@ -114,13 +133,13 @@ v-model作为双向绑定指令也是vue两大核心功能之一，使用非常�
 
 # 双向绑定实现原理
 
-当一个**Vue**实例创建时，Vue会遍历data选项的属性，用 **Object.defineProperty** 将它们转为 getter/setter并且在内部追踪相关依赖，在属性被访问和修改时通知变化。
+当一个**Vue**实例创建时，Vue会遍历data选项的属性。Vue采用数据劫持结合发布者-订阅者模式的方式，通过`Object.defineProperty()`来劫持各个属性的`setter`，`getter`，`dep.addSub`来收集订阅的依赖，`watcher`监听数据的变化，在数据变动时发布消息给订阅者，触发相应的监听回调。
 
-每个组件实例都有相应的 watcher 程序实例，它会在组件渲染的过程中把属性记录为依赖，之后当依赖项的 setter 被调用时，会通知 watcher重新计算，从而致使它关联的组件得以更新。
+监听器`Observer`，用来劫持并监听所有属性，如果有变动的，就通知订阅者。 订阅者`Watcher`，可以收到属性的变化通知并执行相应的函数，从而调用对应update更新视图。
 
-**梳理：**
+![image-20210827202245945](../source/images/vue/image-20210827202245945.png)
 
-首先我们为每个vue属性用Object.defineProperty()实现数据劫持，为每个属性分配一个订阅者集合的管理数组dep；然后在编译的时候在该属性的数组dep中添加订阅者，v-model会添加一个订阅者，{{}}也会，v-bind也会，只要用到该属性的指令理论上都会，接着为input会添加监听事件，修改值就会为该属性赋值，触发该属性的set方法，在set方法内通知订阅者数组dep，订阅者数组循环调用各订阅者的update方法更新视图。
+[参考文章](https://juejin.cn/post/6991724298197008421#heading-6)
 
 # v-for中key的作用
 
@@ -150,9 +169,80 @@ browserslist: 支持的浏览器列表
 
 # NextTick的实现
 
+
+
 # keep-alive的实现
 
-# 做过哪些性能优化
+
+
+# 实现双向绑定 Proxy 与 Object.defineProperty 相比优劣如何?
+
+1. **Object.definedProperty**的作用是劫持一个对象的属性，劫持属性的getter和setter方法，在对象的属性发生变化时进行特定的操作。而 Proxy劫持的是整个对象。
+2. **Proxy**会返回一个代理对象，我们只需要操作新对象即可，而Object.defineProperty只能遍历对象属性直接修改。
+3. **Object.definedProperty**不支持数组，更准确的说是不支持数组的各种API，因为如果仅仅考虑arry[i] = value 这种情况，是可以劫持的，但是这种劫持意义不大。而Proxy可以支持数组的各种API。
+4. 尽管Object.defineProperty有诸多缺陷，但是其兼容性要好于Proxy。
+
+[参考文章](https://blog.csdn.net/wangzunkuan/article/details/80729683?utm_medium=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7EBlogCommendFromMachineLearnPai2%7Edefault-1.essearch_pc_relevant&depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7EBlogCommendFromMachineLearnPai2%7Edefault-1.essearch_pc_relevant)
+
+# 你知道Vue3有哪些新特性吗？它们会带来什么影响？
+
+- **性能提升**
+
+更小巧、更快速 支持自定义渲染器 支持摇树优化：一种在打包时去除无用代码的优化手段 支持Fragments和跨组件渲染
+
+- **API变动**
+
+模板语法99%保持不变 原生支持基于class的组件，并且无需借助任何编译及各种stage阶段的特性 在设计时也考虑TypeScript的类型推断特性 `重写虚拟DOM`可以期待更多的编译时提示来减少运行时的开销 `优化插槽生成`可以单独渲染父组件和子组件 `静态树提升`降低渲染成本 `基于Proxy的观察者机制`节省内存开销
+
+- **不兼容IE11**
+
+`检测机制`更加全面、精准、高效,更具可调试式的响应跟踪
+
+# 对SPA的理解
+
+SPA（ single-page application ）仅在 Web 页面初始化时加载相应的 HTML、JavaScript 和 CSS。一旦页面加载完成，SPA 不会因为用户的操作而进行页面的重新加载或跳转；取而代之的是利用路由机制实现 HTML 内容的变换，UI 与用户的交互，避免页面的重新加载。
+
+**优点：**
+
+- 用户体验好、快，内容的改变不需要重新加载整个页面，避免了不必要的跳转和重复渲染；
+- 基于上面一点，SPA 相对对服务器压力小；
+- 前后端职责分离，架构清晰，前端进行交互逻辑，后端负责数据处理；
+
+**缺点：**
+
+- 初次加载耗时多：为实现单页 Web 应用功能及显示效果，需要在加载页面的时候将 JavaScript、CSS 统一加载，部分页面按需加载；
+- 前进后退路由管理：由于单页应用在一个页面中显示所有的内容，所以不能使用浏览器的前进后退功能，所有的页面切换需要自己建立堆栈管理；
+- SEO 难度较大：由于所有的内容都在一个页面中动态替换显示，所以在 SEO 上其有着天然的弱势。
+
+[参考文章](https://juejin.cn/post/6844903918753808398)
+
+# vue-router的实现原理
+
+
+
+# vuex实现原理
+
+
+
+# 路由懒加载原理
+
+### vue-router实现路由懒加载（动态加载路由）
+
+- 把不同路由对应的组件分割成不同的代码块，然后当路由被访问时才加载对应的组件即为路由的懒加载，可以加快项目的加载速度，提高效率
+
+```
+const router = new VueRouter({
+  routes: [
+    {
+      path: '/home',
+      name: 'Home'，
+      component:() = import('../views/home')
+		}
+  ]
+})
+```
+
+# 性能优化
 
 ```js
 编码阶段
@@ -183,29 +273,4 @@ PWA
 还可以使用缓存(客户端缓存、服务端缓存)优化、服务端开启gzip压缩等。
 ```
 
-# 实现双向绑定 Proxy 与 Object.defineProperty 相比优劣如何?
-
-1. **Object.definedProperty**的作用是劫持一个对象的属性，劫持属性的getter和setter方法，在对象的属性发生变化时进行特定的操作。而 Proxy劫持的是整个对象。
-2. **Proxy**会返回一个代理对象，我们只需要操作新对象即可，而Object.defineProperty只能遍历对象属性直接修改。
-3. **Object.definedProperty**不支持数组，更准确的说是不支持数组的各种API，因为如果仅仅考虑arry[i] = value 这种情况，是可以劫持的，但是这种劫持意义不大。而Proxy可以支持数组的各种API。
-4. 尽管Object.defineProperty有诸多缺陷，但是其兼容性要好于Proxy。
-
-[参考文章](https://blog.csdn.net/wangzunkuan/article/details/80729683?utm_medium=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7EBlogCommendFromMachineLearnPai2%7Edefault-1.essearch_pc_relevant&depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7EBlogCommendFromMachineLearnPai2%7Edefault-1.essearch_pc_relevant)
-
-# 你知道Vue3有哪些新特性吗？它们会带来什么影响？
-
-- **性能提升**
-
-更小巧、更快速 支持自定义渲染器 支持摇树优化：一种在打包时去除无用代码的优化手段 支持Fragments和跨组件渲染
-
-- **API变动**
-
-模板语法99%保持不变 原生支持基于class的组件，并且无需借助任何编译及各种stage阶段的特性 在设计时也考虑TypeScript的类型推断特性 `重写虚拟DOM`可以期待更多的编译时提示来减少运行时的开销 `优化插槽生成`可以单独渲染父组件和子组件 `静态树提升`降低渲染成本 `基于Proxy的观察者机制`节省内存开销
-
-- **不兼容IE11**
-
-`检测机制`更加全面、精准、高效,更具可调试式的响应跟踪
-
-# vuex、vue-router的实现原理
-
-# 路由懒加载原理
+[Vue 项目性能优化 — 实践指南](https://juejin.cn/post/6844903913410314247)

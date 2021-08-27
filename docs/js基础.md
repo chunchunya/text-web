@@ -481,13 +481,20 @@ function fn(){}()  //错误的，解析器会理解成一个函数定义，后�
     console.log(Array.isArray([])); // true    
 ```
 
-3、`Object.prototype.toString()`
+3、`Object.prototype.toString.call()`
 
 ```js
     function isArray(arr) {
     return Object.prototype.toString.call(arr) === '[object Array]';
   }
     console.log(isArray([])); // true
+```
+
+4、**constructor**判断: 实例的构造函数属性constructor指向构造函数
+
+```js
+	let a = [1,3,4]; 
+	a.constructor === Array; //true
 ```
 
 # 数组的一些方法
@@ -1067,6 +1074,20 @@ class Dog extends Animal{
 }
 ```
 
+# Set、Map、WeakSet、WeakMap
+
+**Set**对象可以存储**任何类型**的数据。 值是唯一的，**没有重复**的值。
+
+**Map**对象保存**键值对**，任意值都可以成为它的键或值。
+
+**WeakSet** 结构与 **Set** 类似，也是不重复的值的集合 . **WeakMap** 对象是一组**键值对**的集合
+
+不同： `WeakSet` 的成员只能是**对象**，而不能是其他类型的值。 **WeakSet 不可遍历**。
+
+`WeakMap`只接受**对象作为键名**（`null`除外），不接受其他类型的值作为键名。
+
+`WeakMap`的键名所指向的对象，**不计入**垃圾回收机制。
+
 # new一个对象的过程
 
 因此new操作符创建对象可以分为以下四个步骤：
@@ -1179,6 +1200,170 @@ Promise是一种异步解决方案，Promise对象接受**一个回调函数**�
 
 1. 优点就是更好的异步解决方案
 2. 缺点就是无法取消Promise，一旦新建它就会立即执行，无法中途取消
+
+# promise怎么实现链式调用跟返回不同的状态
+
+实现链式调用：使用`.then()`或者`.catch()`方法之后会返回一个`promise`对象，可以继续用`.then()`方法调用，再次调用所获取的参数是上个`then`方法`return`的内容
+
+1. promise的三种状态是 `fulfilled`(已成功)/`pengding`(进行中)/`rejected`(已拒绝)
+2. 状态只能由 Pending --> Fulfilled 或者 Pending --> Rejected，且一但发生改变便不可二次修改；
+3. Promise 中使用 `resolve` 和 `reject` 两个函数来更改状态；
+4. then 方法内部做的事情就是状态判断:
+
+- 如果状态是成功，调用成功回调函数
+- 如果状态是失败，调用失败回调函数
+
+# 函数柯里化
+
+`柯里化(Currying)` 是把接收多个参数的原函数变换成接受一个单一参数（原来函数的第一个参数的函数)并返回一个新的函数，新的函数能够接受余下的参数，并返回和原函数相同的结果。
+
+柯里化的函数可以延迟接收参数，就是比如一个函数需要接收的参数是两个，执行的时候必须接收两个参数，否则没法执行。但是柯里化后的函数，可以先接收一个参数。
+
+```js
+// 普通的add函数
+function add(x, y) {
+    return x + y
+}
+// Currying后
+function curryingAdd(x) {
+    return function (y) {
+        return x + y
+    }
+}
+add(1, 2)           // 3
+curryingAdd(1)(2)   // 3
+```
+
+# 什么时候不能用箭头函数
+
+## 1. 定义对象方法
+
+ JS 中对象方法的定义方式是在对象上定义一个指向函数的属性，当方法被调用的时候，方法内的 this 就会指向方法所属的对象。
+
+```js
+let obj = {
+    array: [1, 2, 3],
+    sum: () => {
+        console.log(this === window); // true
+        return this.array.reduce((result, item) => result + item);
+    }
+};
+console.log(this === window); //true
+obj.sum();//报错：Uncaught TypeError: Cannot read property 'reduce' of undefined at Object.sum
+```
+
+运行时 this.array 是未定义的，调用 obj.sum 的时候，执行上下文里面的 this 仍然指向的是 window，原因是箭头函数把函数上下文绑定到了 window 上，this.array 等价于 window.array，显然后者是未定义的。
+
+修改方式：使用函数表达式或者方法简写（ES6 中已经支持）来定义方法，这样能确保 this 是在运行时是由包含它的上下文决定的。代码如下：
+
+```js
+let obj = {
+    array: [1, 2, 3],
+    sum() {
+        console.log(this === window); // false
+        return this.array.reduce((result, item) => result + item);
+    }
+};
+console.log(this === window); //true
+console.log(obj.sum());//6
+```
+
+## 2.定义原型方法
+
+同样的规则适用于原型方法（prototype method）的定义，使用箭头函数会导致运行时的执行上下文错误。比如下面代码：
+
+```js
+function Cat(name) {
+    this.name = name;
+}
+
+Cat.prototype.sayCatName = () => {
+    console.log(this === window); // => true
+    return this.name;
+};
+
+const cat = new Cat('Tom');
+console.log(cat.sayCatName()); // undefined
+```
+
+使用传统的函数表达式就能解决问题，代码如下所示：
+
+```js
+function Cat(name) {
+    this.name = name;
+}
+
+Cat.prototype.sayCatName = function () {
+    console.log(this === window); // => false
+    return this.name;
+}
+
+const cat = new Cat('Tom');
+console.log(cat.sayCatName()); // Tom
+```
+
+sayCatName 变成普通函数之后，被调用时的执行上下文就会指向新创建的 cat 实例。
+
+## 3. 定义事件回调函数
+
+箭头函数在声明的时候就绑定了执行上下文，要动态改变上下文是不可能的，在需要动态上下文的时候它的弊端就凸显出来。
+
+比如在客户端编程中常见的 DOM 事件回调函数（event listenner）绑定，触发回调函数时 this 指向当前发生事件的 DOM 节点，而动态上下文这个时候就非常有用，比如下面这段代码试图使用箭头函数来作事件回调函数。
+
+```js
+const button = document.getElementById('myButton');
+button.addEventListener('click', () => {
+    console.log(this === window); // true
+    this.innerHTML = 'Clicked button';
+});
+```
+
+在全局上下文下定义的箭头函数执行时 this 会指向 window，当单击事件发生时，this.innerHTML 就等价于 window.innerHTML，而后者是没有任何意义的。
+
+使用函数表达式就可以在运行时动态的改变 this，修正后的代码：
+
+```js
+const button = document.getElementById('myButton');
+button.addEventListener('click', function () {
+    console.log(this === button); // true
+    this.innerHTML = 'Clicked button';
+});
+```
+
+## 4. 定义构造函数
+
+构造函数中的 this 指向新创建的对象，当执行 new Car()  的时候，构造函数 Car 的上下文就是新创建的对象，也就是说 this instanceof Car ===  true。显然，箭头函数是不能用来做构造函数， 实际上 JS 会禁止你这么做，如果你这么做了，它就会抛出异常。
+
+比如下面的代码就会报错：
+
+```js
+const Message = (text) => {
+    this.text = text;
+};
+const helloMessage = new Message('Hello World!');//报错： Throws "TypeError: Message is not a constructor"
+```
+
+构造新的 Message 实例时，JS 引擎抛了错误，因为 Message 不是构造函数。可以通过使用函数表达式或者函数声明来声明构造函数修复上面的例子。
+
+```js
+const Message = function(text) {
+    this.text = text;
+};
+const helloMessage = new Message('Hello World!');
+console.log(helloMessage.text); // 'Hello World!'
+```
+
+
+
+
+
+
+
+
+
+
+
+
 
 # DOM事件的级别
 
@@ -1411,6 +1596,35 @@ event.target  //当前被点击的元素。在事件委托中，指的是【子�
 - offsetWidth/offsetHeight 返回值包含 content + padding + border，效果与 e.getBoundingClientRect()相同
 - clientWidth/clientHeight 返回值只包含 content + padding，如果有滚动条，也不包含滚动条
 - scrollWidth/scrollHeight 返回值包含 content + padding + 溢出内容的尺寸
+
+# 前端模块化
+
+目前流行的js模块化规范有**CommonJS、AMD、CMD以及ES6的模块系统**。
+
+`nodeJS`里面的模块是基于`commonJS`规范实现的，原理是文件的读写，导出文件要使用`exports`、`module.exports`，引入文件用`require`。 每个文件就是一个模块；每个文件里面的代码会用默认写在一个闭包函数里面 。
+
+`AMD`规范则是非同步加载模块，允许指定回调函数，`AMD` 是 `RequireJS` 在推广过程中对模块定义的规范化产出。
+
+`AMD`推崇**依赖前置**, `CMD`推崇**依赖就近**。对于依赖的模块AMD是提前执行，CMD是延迟执行。
+
+在`ES6`中，我们可以使用 `import` 关键字引入模块，通过 `exprot` 关键字导出模块，但是由于ES6目前无法在浏览器中执行，所以，我们只能通过`babel`将不被支持的`import`编译为当前受到广泛支持的 `require`。
+
+CommonJs 和 ES6 模块化的区别：
+
+1. CommonJS 模块输出的是一个值的拷贝，ES6 模块输出的是值的引用。
+2. CommonJS 模块是运行时加载，ES6 模块是编译时输出接口。
+
+[参考](https://juejin.cn/post/6991724298197008421#heading-6)
+
+[前端模块化：CommonJS,AMD,CMD,ES6](https://juejin.cn/post/6844903576309858318)
+
+# import 和 require 导入的区别
+
+import 的ES6 标准模块； require 是 AMD规范引入方式；
+
+import是编译时调用，所以必须放在文件开头;是解构过程 require是运行时调用，所以require理论上可以运用在代码的任何地方;是赋值过程。其实require的结果就是对象、数字、字符串、函数等，再把require的结果赋值给某个变量
+
+
 
 # ES6
 
