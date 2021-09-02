@@ -15,6 +15,19 @@ React是一个单向数据流的库，状态驱动视图。`State --> View --> N
 
 Vue封装好了一些v-if，v-for，React什么都是自己实现，自由度更高。
 
+
+
+# Vue框架的特点
+
+- 模板渲染：基于 html 的模板语法，学习成本低。
+
+- 响应式的更新机制：数据改变之后，视图会自动刷新。【重要】
+- 渐进式框架
+- 组件化/模块化
+  - 模块化：是从代码逻辑的角度进行划分的；方便代码分层开发，保证每个功能模块的职能单一
+  - 组件化：是从UI界面的角度进行划分的；前端的组件化，方便UI组件的重用
+- 轻量：开启 gzip压缩后，可以达到 20kb 大小。（React 达到 35kb，AngularJS 达到60kb）。
+
 # 简述MVVM
 
 **MVVM**是`Model-View-ViewModel`缩写，也就是把`MVC`中的`Controller`演变成`ViewModel。Model`层代表数据模型，`View`代表UI组件，`ViewModel`是`View`和`Model`层的桥梁，它有两个方向，第一将后端传来的数据转换成页面可以看到的视图，第二，将用户在页面上的交互转化成为后端数据我们称之为双向绑定。
@@ -38,6 +51,15 @@ Vue封装好了一些v-if，v-for，React什么都是自己实现，自由度更
 - destroyed：Vue 实例销毁后调用。调用后，Vue 实例指示的所有东西都会解绑定，所有的事件监听器会被移除，所有的子实例也会被销毁。
 
 PS：可以在beforeDestroy里**清除定时器、或清除事件绑定**。
+
+# 异步请求在那个生命周期阶段发起？
+
+可以在钩子函数 created、beforeMount、mounted 中进行异步请求，因为在这三个钩子函数中，data 已经创建，可以将服务端端返回的数据进行赋值。
+
+如果异步请求不需要依赖 Dom 推荐在 created 钩子函数中调用异步请求，因为在 created 钩子函数中调用异步请求有以下优点：
+
+- 能更快获取到服务端数据，减少页面  loading 时间；
+- ssr  不支持 beforeMount 、mounted 钩子函数，所以放在 created 中有助于一致性；
 
 # 什么是虚拟DOM？
 
@@ -151,6 +173,16 @@ key主要用在Vue的虚拟DOM算法，用来对比新旧节点。如果不使�
 
 注意：实际开发过程中渲染一组列表时，key必须设置（节省性能），且应该尽量避免使用索引作为key（有的时候列表发生排序），这样容易导致一些隐藏bug。
 
+# 为什么组件中的data是一个函数而不是一个对象
+
+JavaScript中的对象是引用类型的数据，当多个实例引用同一个对象时，只要一个实例对这个对象进行操作，其他实例中的数据也会发生变化。
+
+而在Vue中，我们更多的是想要复用组件，那就需要每个组件都有自己的数据，这样组件之间才不会相互干扰。
+
+所以组件的数据不能写成对象的形式，而是要写成函数的形式。数据以函数返回值的形式定义，这样当我们每次复用组件的时候，就会返回一个新的data，也就是说每个组件都有自己的私有数据空间，它们各自维护自己的数据，不会干扰其他组件的正常运行。
+
+[链接](https://www.jianshu.com/p/3f814db4f918)
+
 # vue项目中package.json属性
 
 部分截图如下：
@@ -173,7 +205,72 @@ browserslist: 支持的浏览器列表
 
 # keep-alive的实现
 
+### 概念
 
+keep-alive 是 Vue 内置的一个抽象组件，可以使被包含的组件保留状态，即keep-alive 可以实现组件的缓存，当组件切换时不会对当前组件进行卸载。
+
+### 作用
+
+在组件切换过程中将状态保留在内存中，防止重复渲染DOM，减少加载时间及性能消耗，提高用户体验性。
+
+### 理解
+
+- 一般结合路由和动态组件一起使用，用于缓存组件；
+- 提供 include 和 exclude 属性，两者都支持字符串或正则表达式， include 表示只有名称匹配的组件会被缓存，exclude 表示任何名称匹配的组件都不会被缓存 ，**其中 exclude 的优先级比 include 高**；
+- 对应两个钩子函数 activated 和 deactivated ，当组件被激活时，触发钩子函数 activated，当组件被移除时，触发钩子函数 deactivated。
+
+> props:
+>
+> - include - 字符串或正则表达式。只有名称匹配的组件会被缓存。
+> - exclude - 字符串或正则表达式。任何名称匹配的组件都不会被缓存。
+> - max - 数字。最多可以缓存多少组件实例。
+
+include 和 exclude 的属性允许组件有条件地缓存。二者都可以用“，”分隔字符串、正则表达式、数组。当使用正则或者是数组时，要记得使用v-bind
+
+```
+include和exclude属性是根据组件中的name属性来进行过滤的，而非路由中的name
+```
+
+### 具体实现
+
+#### 钩子函数：
+
+```text
+    activated 组件渲染后调用
+    deactivated 组件销毁后调用
+```
+
+```
+<keep-alive include='include_components' exclude='exclude_components'>
+
+  <component>
+     *<!-- 该组件是否缓存取决于include和exclude属性 -->*
+  </component>
+  
+</keep-alive>
+```
+
+```js
+
+*<!-- 逗号分隔字符串，只有组件a与b被缓存。 -->*
+<keep-alive include="a,b">
+  <component></component>
+</keep-alive>
+
+*<!-- 正则表达式 (需要使用 v-bind，符合匹配规则的都会被缓存) -->*
+<keep-alive :include="/a|b/">
+  <component></component>
+</keep-alive>
+
+*<!-- Array (需要使用 v-bind，被包含的都会被缓存) -->*
+<keep-alive :include="['a', 'b']">
+  <component></component>
+</keep-alive>
+```
+
+### 原理
+
+`Vue.js`内部将`DOM`节点抽象成了一个个的`VNode`节点，`keep-alive`组件的缓存也是基于`VNode`节点的而不是直接存储`DOM`结构。它将满足条件`（pruneCache与pruneCache）`的组件在`cache`对象中缓存起来，在需要重新渲染的时候再将`vnode`节点从`cache`对象中取出并渲染。
 
 # 实现双向绑定 Proxy 与 Object.defineProperty 相比优劣如何?
 

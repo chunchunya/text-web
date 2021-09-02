@@ -200,3 +200,28 @@ flex:  1, 即为flex-grow:  1.常用作自适应布局。
 **区别总结起来就是**伪类的操作对象是文档树中已有的元素，而伪元素则创建了一个文档数外的元素。因此，伪类与伪元素的区别在于：有没有创建一个文档树之外的元素。
 
 [总结伪类伪元素](http://www.alloyteam.com/2016/05/summary-of-pseudo-classes-and-pseudo-elements/)
+
+# display:none/visibility:hidden/opacity:0之间的区别
+
+![image-20210828154316525](../source/images/css%E5%9F%BA%E7%A1%80/image-20210828154316525.png)
+
+# CSS3新增伪类
+
+![image-20210831201926379](../source/images/css%E5%9F%BA%E7%A1%80/image-20210831201926379.png)
+
+# CSS3有哪些新特性
+
+```text
+新增各种CSS选择器    （:not(.input)：所有class不是“input”的节点）
+圆角        （border-radius:8px）
+多列布局    （multi-columnlayout）
+阴影和反射    （Shadow\Reflect）
+文字特效        （text-shadow）
+文字渲染        （Text-decoration）
+线性渐变        （gradient）
+旋转            （transform）
+缩放，定位，倾斜，动画，多背景
+例如：transform:\scale(0.85,0.90)\translate(0px,-30px)\skew(-9deg,0deg)\Animation:
+```
+
+[参考文章](https://juejin.cn/post/6844903518520901639#heading-45)
