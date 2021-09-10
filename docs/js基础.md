@@ -381,6 +381,24 @@ console.log(Math.max.apply(Math,mmm));
 console.log(Math.min.apply(Math,mmm));
 ```
 
+# null，undefined 的区别
+
+```
+ null 		表示一个对象是“没有值”的值，也就是值为“空”；
+ undefined 	表示一个变量声明了没有初始化(赋值)；
+
+ undefined不是一个有效的JSON，而null是；
+ undefined的类型(typeof)是undefined；
+ null的类型(typeof)是object；
+
+ Javascript将未赋值的变量默认值设为undefined；
+ Javascript从来不会将变量设为null。它是用来让程序员表明某个用var声明的变量时没有值的。
+注意：
+ 	在验证null时，一定要使用　=== ，因为 == 无法分别 null 和　undefined
+ 	null == undefined // true
+ 	null === undefined // false
+```
+
 # js 的事件循环机制
 
 由于JS是单线程的，为了防止一个函数执行时间过长阻塞后面的代码，引入事件循环机制。所以会先将同步任务压入执行栈中，依次执行，将异步任务推入异步队列，异步队列又分为宏任务队列和微任务队列，因为宏任务队列的执行时间较长，所以微任务队列要优先于宏任务队列（按照代码的层级,同层级先执行微任务其次执行宏任务）。
