@@ -296,7 +296,87 @@ console.log(obj4);
 
 ![image-20210729183943221](../source/images/js%E5%9F%BA%E7%A1%80/image-20210729183943221.png)
 
+示例2（自写的）：高频率点击按钮，只输出最后一次超过指定时间没有按按钮时的值。
+
+```html
+<body>
+   <button id="btn"></button>
+   <style>
+       #btn{
+           width:100px;
+           height:50px;
+           background:red;
+       }
+   </style>
+
+</body>
+<script>
+    //首先获取到元素
+    var btn = document.getElementById("btn");
+    //给元素添加点击事件
+    // btn.addEventListener("click",debounce(fn,1000));
+    btn.onclick = debounce(fn,1000);
+
+    //定义一个防抖函数  这里利用了闭包
+    function debounce(callback,delay){
+        //首先定义空的定时器
+        let timer;
+        return function(){
+            //每次触发事件都先清空计时器，当指定时间内不再触发时，执行后面的定时器（执行定时器里的方法）
+            clearTimeout(timer);
+            timer = setTimeout(callback,delay);
+        }
+    }
+    function fn(){
+        console.log("你好啊！");
+    }
+</script>
+```
+
 ![image-20210729183954587](../source/images/js%E5%9F%BA%E7%A1%80/image-20210729183954587.png)
+
+示例2（自写）：
+
+```html
+<body>
+<button id="btn"></button>
+<style>
+    #btn{
+        width:100px;
+        height:50px;
+        background:red;
+    }
+</style>
+
+</body>
+<script>
+    //首先获取到元素
+    var btn = document.getElementById("btn");
+    //给元素添加点击事件
+    // btn.addEventListener("click",debounce(fn,1000));
+    btn.onclick = throttle(fn,1000);
+
+    //定义一个节流函数  这里利用了闭包
+    function throttle(callback,delay){
+        let timeOut;
+        return function(){
+            //如果timeOut没有值的话就执行函数，有的话说明定时器还没有结束，那就不管触发多少次都不执行，都得等timeOut执行完一次之后为空了才能继续执行。
+            if(!timeOut){
+                timeOut = setTimeout(function(){
+                    callback();
+                    timeOut = null;
+                },delay);
+            }
+       }
+    }
+    function fn(){
+        console.log(new Date());
+    }
+
+</script>
+```
+
+
 
 # apply、call、bind的用法和区别
 
@@ -392,12 +472,16 @@ console.log(Math.min.apply(Math,mmm));
  null的类型(typeof)是object；
 
  Javascript将未赋值的变量默认值设为undefined；
- Javascript从来不会将变量设为null。它是用来让程序员表明某个用var声明的变量时没有值的。
+ Javascript从来不会将变量设为null。它是用来让程序员表明某个用var声明的变量是没有值的。
 注意：
  	在验证null时，一定要使用　=== ，因为 == 无法分别 null 和　undefined
  	null == undefined // true
  	null === undefined // false
 ```
+
+用一句话总结两者的区别就是：undefined 表示一个变量自然的、最原始的状态值，而 null 则表示一个变量被人为的设置为空对象，而不是原始状态。所以，在实际使用过程中，为了保证变量所代表的语义，不要对一个变量显式的赋值 undefined，当需要释放一个对象时，直接赋值为 null 即可。
+
+[链接——undefined的四种应用场景](https://juejin.cn/post/6844903777506426893)
 
 # js 的事件循环机制
 
