@@ -315,11 +315,7 @@ SPA（ single-page application ）仅在 Web 页面初始化时加载相应的 H
 
 # vue-router的实现原理
 
-
-
 # vuex实现原理
-
-
 
 # 路由懒加载原理
 
@@ -371,3 +367,16 @@ PWA
 ```
 
 [Vue 项目性能优化 — 实践指南](https://juejin.cn/post/6844903913410314247)
+
+# 路由跳转的几种方式
+
+1. router-link （声明式路由）
+
+2. this.$router.push() (函数里面调用)
+
+3. this.$router.replace() (用法同上,push)
+
+4. this.$router.go(n) 
+
+[参考文章](https://blog.csdn.net/jiandan1127/article/details/86170336)
+
