@@ -58,3 +58,8 @@ Webpack 的运行流程是一个串行的过程,从启动到结束会依次执�
 7. 输出完成：在确定好输出内容后,根据配置确定输出的路径和文件名,把文件内容写入到文件系统。
 
 [参考文章](https://segmentfault.com/a/1190000021494964?utm_source=tag-newest)
+
+## tree shaking
+
+**tree shaking**是一种采用`删除不需要的额外代码的方式优化代码体积`的技术。专业术语叫 `Dead code elimination`
+
