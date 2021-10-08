@@ -380,3 +380,16 @@ PWA
 
 [参考文章](https://blog.csdn.net/jiandan1127/article/details/86170336)
 
+# vue跳转生命周期
+
+**a页面跳转到b页面，a,b页面各自触发的生命周期函数如下：**
+
+​      b   beforeCreated
+
+​      b   created
+
+​      a   beforeDestroy
+
+​      a   destroyed
+
+​      b   mounted
