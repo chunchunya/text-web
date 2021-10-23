@@ -52,7 +52,7 @@ Vue封装好了一些v-if，v-for，React什么都是自己实现，自由度更
 
 PS：可以在beforeDestroy里**清除定时器、或清除事件绑定**。
 
-# 异步请求在那个生命周期阶段发起？
+# 异步请求在哪个生命周期阶段发起？
 
 可以在钩子函数 created、beforeMount、mounted 中进行异步请求，因为在这三个钩子函数中，data 已经创建，可以将服务端端返回的数据进行赋值。
 
@@ -168,10 +168,6 @@ v-model作为双向绑定指令也是vue两大核心功能之一，使用非常�
 
 上述流程如图所示：
 ![图片描述](../source/images/vue/bVBQYu)
-
-### 
-
-![image-20210827202245945](../source/images/vue/image-20210827202245945.png)
 
 [参考文章](https://juejin.cn/post/6991724298197008421#heading-6)
 

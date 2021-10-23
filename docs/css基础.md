@@ -34,7 +34,7 @@ display：inline；与之相对应。
 
 flex:  1, 即为flex-grow:  1.常用作自适应布局。
 
-# box-sizing属性的值：
+# box-sizing属性的值
 
 - content-box，默认值，遵从标准盒模型；
 - border-box，使用IE盒模型；
@@ -275,8 +275,6 @@ flex:  1, 即为flex-grow:  1.常用作自适应布局。
 
 ![img](../source/images/css%E5%9F%BA%E7%A1%80/007S8ZIlly1gjdiep1u51j30tm0bkgm7.jpg)
 
-## 
-
 # IFC 是什么？
 
 ```undefined
@@ -414,7 +412,7 @@ lay属性值的原因。
 
 # 水平垂直居中
 
-## 行内元素
+### 行内元素
 
 ```css
 水平居中：text-align: center;
@@ -425,7 +423,7 @@ lay属性值的原因。
 }
 ```
 
-## 块级元素
+### 块级元素
 
 ```css
 对于宽高固定的元素
