@@ -2,6 +2,8 @@
 
 Undefined,Null,String,Number,Boolean,Bigint,Symbol
 
+
+
 # JavaScript数据类型判断
 
 确定一个值是哪种基本类型可以使用` typeof`操作符，而确定一个值是哪种引用类型可以使用`instanceof `操作符。
@@ -123,7 +125,7 @@ console.log(window.name)
 
 **深拷贝**是将一个对象从内存中完整地拷贝一份出来，从堆内存中开辟一个新的区域存放新对象，且修改新对象不影响原对象。
 
-## 针对引用类型来说，赋值、深拷贝、浅拷贝的区别
+## 	针对引用类型来说，赋值、深拷贝、浅拷贝的区别
 
 1.浅拷贝、赋值的区别
 
@@ -135,7 +137,7 @@ console.log(window.name)
 
 ![image-20210729183645687](../source/images/js%E5%9F%BA%E7%A1%80/image-20210729183645687.png)
 
-深、浅拷贝实现方式：
+2.深、浅拷贝实现方式：
 
 ![image-20210729183716328](../source/images/js%E5%9F%BA%E7%A1%80/image-20210729183716328.png)
 
@@ -246,7 +248,7 @@ console.log(obj4);
 
 3、块级作用域（ES6）
 
-### 作用域的深层次理解
+## 作用域的深层次理解
 
 **执行期的上下文**
 	    当函数代码执行的前期会创建一个执行期上下文的内部对象A0(作用域)
@@ -255,14 +257,14 @@ console.log(obj4);
 
 在全局代码执行的前期会创建一个执行期的上下文的对象GO
 
-### 函数作用域预编译
+## 函数作用域预编译
 
 1. 创建ao对象 A0{}
 2. 找形参和变量声明  将变量和形参名当做AO对象的属性名    值为undefined
 3. 实参形参相统一
 4. 在函数体里面找函数声明   值赋予函数体
 
-### 全局作用域的预编译
+## 全局作用域的预编译
 
 1. 创建GO对象
 2. 找变量声明  将变量名作为GO对象的属性名    值是undefined
@@ -381,7 +383,7 @@ cat.sayHi.bind(mouse, 10, "cheese")()  // hi，I am Jerry,10 years old,I like ch
 let arr = Array.prototype.slice.call(伪数组)//可以将伪数组转化为z真正的数组
 ```
 
-### 使用apply实现获取数组的最大最小值
+## 使用apply实现获取数组的最大最小值
 
 ```js
 //使用apply实现获取数组的最大最小值
@@ -541,7 +543,7 @@ function fn(){}()  //错误的，解析器会理解成一个函数定义，后�
 
 # 数组的一些方法
 
-### reduce方法
+##   reduce方法
 
 ```javascript
 (1)reduce(function(prev,cur,index,arr){...},init) //有初始值   即当有初始值的时候，prev代表的是init，cur代表的是数组的第一项
@@ -1615,7 +1617,7 @@ event.stopImmediatePropagation();
 
 场景：我用addEventListener给某按钮同时注册了事件A、事件B。此时，如果我单击按钮，就会依次执行事件A和事件B。现在要求：单击按钮时，只执行事件A，不执行事件B。该怎么做呢？这是时候，就可以用到`stopImmediatePropagation`方法了。做法是：在事件A的响应函数中加入该语句。
 
-### event 属性
+**event 属性**
 
 event 有很多属性，常见属性有如下：
 
