@@ -248,7 +248,7 @@ console.log(obj4);
 
 3、块级作用域（ES6）
 
-## **作用域的深层次理解**
+## 作用域的深层次理解
 
   **执行期的上下文**
 	    当函数代码执行的前期会创建一个执行期上下文的内部对象A0(作用域)
@@ -257,14 +257,14 @@ console.log(obj4);
 
 在全局代码执行的前期会创建一个执行期的上下文的对象GO
 
-## **函数作用域预编译**
+## 函数作用域预编译
 
 1. 创建ao对象 A0{}
 2. 找形参和变量声明  将变量和形参名当做AO对象的属性名    值为undefined
 3. 实参形参相统一
 4. 在函数体里面找函数声明   值赋予函数体
 
-## **全局作用域的预编译**
+## 全局作用域的预编译
 
 1. 创建GO对象
 2. 找变量声明  将变量名作为GO对象的属性名    值是undefined
@@ -543,7 +543,7 @@ function fn(){}()  //错误的，解析器会理解成一个函数定义，后�
 
 # 数组的一些方法
 
-###   reduce方法
+##   reduce方法
 
 ```javascript
 (1)reduce(function(prev,cur,index,arr){...},init) //有初始值   即当有初始值的时候，prev代表的是init，cur代表的是数组的第一项
@@ -600,7 +600,7 @@ console.log(newArr1(arr2));
 
 ```
 
-### map方法
+## map方法
 
 map() 方法返回一个新数组，数组中的元素为原始数组元素调用函数处理后的值。map()不会对空数组进行检测、不会改变原始数组 。
 
@@ -613,7 +613,7 @@ let newArr = arr.map((item,index)=>{return item+index})
 console.log(newArr);      //[1,3,5,7,9,11,13]
 ```
 
-### filter方法
+## filter方法
 
  filter用于对数组进行过滤。 它创建一个新数组,新数组中的元素是通过检查指定数组中符合条件的所有元素。 
 
@@ -627,7 +627,7 @@ let newArr1 = arr.filter(function(item,index){
 console.log(newArr1);  //[7]
 ```
 
-### some方法
+## some方法
 
 some() 方法用于检测数组中的元素是否满足指定条件（函数提供）。会依次执行数组的每个元素：
 
@@ -648,7 +648,7 @@ let some = obj1.some(function(item,index){
 console.log(some);     //true
 ```
 
-### every方法
+## every方法
 
 every() 方法用于检测数组所有元素是否都符合指定条件（通过函数提供）。使用指定函数检测数组中的所有元素：
 
@@ -669,7 +669,7 @@ let every = obj1.every(function(item,index){
 console.log(every);   //false
 ```
 
-### forEach()方法
+## forEach()方法
 
 和**map方法**类似，唯一的**区别**就是forEach方法没有返回值，是直接在数组本身上进行修改，而map方法是生成一个改后的新数组。
 
@@ -792,7 +792,7 @@ let keys = Object.keys(person1);
 
 ②在继承关系中用来判断一个实例是否属于它的父类型或者祖先类型的实例。
 
-### 手写instanceof
+## 手写instanceof
 
 ```javascript
 let baseType = ['undefined','null','string','number','boolean','bigInt','symbol']
@@ -832,7 +832,7 @@ let instance_of = (L,R)=>{
 
 # 继承
 
-### 原型链继承
+## 原型链继承
 
 ```javascript
 function Parent () {
@@ -866,7 +866,7 @@ var child2 = new Child();
 console.log(child2.names); // ["kevin", "daisy", "yayu"]
 ```
 
-### 盗用构造函数（经典继承）
+## 盗用构造函数（经典继承）
 
 ```javascript
 function Parent () {
@@ -905,7 +905,7 @@ console.log(child2.name); // daisy
 
 ​			2.子类也不能访问父类原型上定义的方法，因此所有类型只能使用构造函数模式。
 
-### 组合继承
+## 组合继承
 
 结合了原型链和盗用构造函数的优点。基本思路是使用原型链继承原型上的属性和方法（实现了函数复用），而通过盗用构造函数继承实例属性(实现了引用类型的私有化和参数传递)。**这样既可以把方法定义在原型上以实现重用，又可以让每个实例都有自己的属性。**是javascript中使用最多的继承模式。
 
@@ -967,7 +967,7 @@ Parent.call(this, name);
 在这里，我们又会调用了一次 Parent 构造函数。
        所以，在这个例子中，如果我们打印 child1 对象，我们会发现 Child.prototype 和 child1 都有一个属性为colors，属性值为[‘red’, ‘blue’, ‘green’]。
 
-### 原型式继承
+## 原型式继承
 
 本质上，object（）是对传入的对象执行了一次浅复制。将传入的对象作为创建的对象的原型。非常适合不需要单独创建构造函数，但仍然需要在对象间共享信息的场合。
 
@@ -999,7 +999,7 @@ console.log(person2.friends); // ["daisy", "kelly", "taylor"]
 
 **注意**：修改`person1.name`的值，`person2.name`的值并未发生改变，并不是因为`person1`和`person2`有独立的 name 值，而是因为`person1.name = 'person1'`，给`person1`添加了 name 值，并非修改了原型上的 name 值。
 
-### 寄生式继承
+## 寄生式继承
 
 创建一个仅用于封装继承过程的函数，该函数在内部以某种形式来做增强对象，最后返回对象。
 
@@ -1015,7 +1015,7 @@ function createObj (o) {
 
 **缺点**：跟借用构造函数模式一样，每次创建对象都会创建一遍方法。
 
-### 寄生组合式继承
+## 寄生组合式继承
 
 组合继承最大的缺点是会调用两次父构造函数。
 
@@ -1106,7 +1106,7 @@ console.log(child1.__proto__);
 
 寄生式组合继承可以算是**引用类型**继承的最佳模式。
 
-### 类继承
+## 类继承
 
 ```js
 //基于class实现继承  核心：无需额外对子类的原型对象进行修改，在子类声明时已经完成继承（子类的原型对象以父类的原型对象为原型）
@@ -1296,7 +1296,7 @@ curryingAdd(1)(2)   // 3
 
 # 什么时候不能用箭头函数
 
-### 定义对象方法
+## 定义对象方法
 
  JS 中对象方法的定义方式是在对象上定义一个指向函数的属性，当方法被调用的时候，方法内的 this 就会指向方法所属的对象。
 
@@ -1328,7 +1328,7 @@ console.log(this === window); //true
 console.log(obj.sum());//6
 ```
 
-### 定义原型方法
+## 定义原型方法
 
 同样的规则适用于原型方法（prototype method）的定义，使用箭头函数会导致运行时的执行上下文错误。比如下面代码：
 
@@ -1364,7 +1364,7 @@ console.log(cat.sayCatName()); // Tom
 
 sayCatName 变成普通函数之后，被调用时的执行上下文就会指向新创建的 cat 实例。
 
-### 定义事件回调函数
+## 定义事件回调函数
 
 箭头函数在声明的时候就绑定了执行上下文，要动态改变上下文是不可能的，在需要动态上下文的时候它的弊端就凸显出来。
 
@@ -1390,7 +1390,7 @@ button.addEventListener('click', function () {
 });
 ```
 
-### 定义构造函数
+## 定义构造函数
 
 构造函数中的 this 指向新创建的对象，当执行 new Car()  的时候，构造函数 Car 的上下文就是新创建的对象，也就是说 this instanceof Car ===  true。显然，箭头函数是不能用来做构造函数， 实际上 JS 会禁止你这么做，如果你这么做了，它就会抛出异常。
 
@@ -1419,7 +1419,7 @@ console.log(helloMessage.text); // 'Hello World!'
 
 DOM事件的级别，准确来说，是**DOM标准**定义的级别。包括：
 
-### DOM0
+## DOM0
 
 ```js
 element.onclick = function () { 
@@ -1427,7 +1427,7 @@ element.onclick = function () {
 }
 ```
 
-### DOM2
+## DOM2
 
 ##### addEventListener（高版本浏览器）
 
@@ -1541,7 +1541,7 @@ element.attachEvent('onclick', function () {
 </body>
 ```
 
-### DOM3
+## DOM3
 
 ```js
 element.addEventListener('keyup', function () {
@@ -1569,7 +1569,7 @@ DOM事件模型讲的就是**捕获和冒泡**。先捕获，再到目标，再�
 
 用户做的是什么操作（比如，是敲键盘了，还是点击鼠标了），这些事件基本都是通过Event对象拿到的。
 
-### 阻止默认事件
+## 阻止默认事件
 
 ```js
  event.preventDefault();
@@ -1577,7 +1577,7 @@ DOM事件模型讲的就是**捕获和冒泡**。先捕获，再到目标，再�
 
 比如，已知`<a>`标签绑定了click事件，此时，如果给`<a>`设置了这个方法，就阻止了链接的默认跳转。
 
-### 阻止冒泡
+## 阻止冒泡
 
 w3c的方法：（火狐、谷歌、IE11）
 
@@ -1609,7 +1609,7 @@ box.onclick = function (event) {
 
 经常在业务场景中遇到。
 
-### 设置事件优先级
+## 设置事件优先级
 
 ```js
 event.stopImmediatePropagation();
@@ -1617,7 +1617,7 @@ event.stopImmediatePropagation();
 
 场景：我用addEventListener给某按钮同时注册了事件A、事件B。此时，如果我单击按钮，就会依次执行事件A和事件B。现在要求：单击按钮时，只执行事件A，不执行事件B。该怎么做呢？这是时候，就可以用到`stopImmediatePropagation`方法了。做法是：在事件A的响应函数中加入该语句。
 
-**event 属性**
+## event 属性
 
 event 有很多属性，常见属性有如下：
 
@@ -1640,6 +1640,8 @@ event.target  //当前被点击的元素。在事件委托中，指的是【子�
 
 事件委托是利用了**冒泡机制**，减少了事件绑定的次数，减少内存消耗，提高性能。
 
+
+
 # 事件冒泡、捕获(委托)
 
 - **事件冒泡**指在在一个对象上触发某类事件，如果此对象绑定了事件，就会触发事件，如果没有，就会向这个对象的父级对象传播，最终父级对象触发了事件。
@@ -1647,11 +1649,15 @@ event.target  //当前被点击的元素。在事件委托中，指的是【子�
 
 `event.stopPropagation()` 或者 ie下的方法 `event.cancelBubble = true;` //阻止事件冒泡
 
+
+
 # offset、client与scroll的区别
 
 - offsetWidth/offsetHeight 返回值包含 content + padding + border，效果与 e.getBoundingClientRect()相同
 - clientWidth/clientHeight 返回值只包含 content + padding，如果有滚动条，也不包含滚动条
 - scrollWidth/scrollHeight 返回值包含 content + padding + 溢出内容的尺寸
+
+
 
 # 前端模块化
 
@@ -1674,11 +1680,15 @@ CommonJs 和 ES6 模块化的区别：
 
 [前端模块化：CommonJS,AMD,CMD,ES6](https://juejin.cn/post/6844903576309858318)
 
+
+
 # import 和 require 导入的区别
 
 import 的ES6 标准模块； require 是 AMD规范引入方式；
 
 import是编译时调用，所以必须放在文件开头;是解构过程 require是运行时调用，所以require理论上可以运用在代码的任何地方;是赋值过程。其实require的结果就是对象、数字、字符串、函数等，再把require的结果赋值给某个变量
+
+
 
 # ES6
 
